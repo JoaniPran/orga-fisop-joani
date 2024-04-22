@@ -18,7 +18,6 @@
   <lib desc="#BFH-Praktika" name="9"/>
   <lib desc="#Input/Output-Extra" name="10"/>
   <lib desc="#Soc" name="11"/>
-  <lib desc="file#../../secuenciales/ALU-para-prestar.circ" name="12"/>
   <main name="registro_salida_restringida"/>
   <options>
     <a name="gateUndefined" val="ignore"/>

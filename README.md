@@ -54,7 +54,9 @@ c) **Desactivaciones y nuevas activaciones de `w`:**
 ### Módulos indicados de hardware:
 
 **a) PC (Contador de Programa):** La señal `inc` incrementa en uno el dato de dirección guardado en el PC.
+
 **b) ALU (Unidad Aritmético Lógica):** La señal `opW` indica si se debe guardar el valor que llega al registro de los flags.
+
 **c) MicroOrgaSmall (DataPath):**
   - `DE_enOutImm`: habilita la entrada al bus de un valor inmediato.
   -  La señal `outData` indica qué registro se va a leer, y `inData` indica cuál se va a escribir.
