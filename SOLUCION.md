@@ -118,3 +118,5 @@ Para el último JMP halt` serían necesarios 45 ciclos de clock (finaliza en el 
 Para realizar el `ADD` son necesarias 5 microinstrucciones, mientras que para el salto `JMP` son necesarias 2.
 
 ## (4) Ampliando la máquina
+
+**a)** Se agregó la instrucción SIG, sus micro-instrucciones están en el archivo `microCode01.ops`, el código de ejemplo se encuentra en el archivo `test02.asm`. También se modificó el archivo `assembler.py` para que pueda funcionar correctamente la nueva instrucción.
