@@ -43,7 +43,7 @@ c) **Desactivaciones y nuevas activaciones de `w`:**
 ## (2) OrgaSmall - Análisis
 
 a) **Tamaño de la memoria:**
-   El tamaño de la memoria es de 256 x 8, es decir, 256 bytes.
+   El tamaño de la memoria es de 256 de 8 bits, es decir, 256 bytes.
 
 b) **Tamaño del PC:**
    El PC tiene un tamaño de 8 bits, correspondiente a la cantidad de bits de las direcciones en la arquitectura.
@@ -53,13 +53,13 @@ c) **Instrucciones nuevas respetando el formato de instrucción:**
 
 ### Módulos indicados de hardware:
 
-- **PC (Contador de Programa):** La señal `inc` incrementa en uno el dato de dirección guardado en el PC.
-- **ALU (Unidad Aritmético Lógica):** La señal `opW` indica si se debe guardar el valor que llega al registro de los flags.
-- **MicroOrgaSmall (DataPath):**
+a) **PC (Contador de Programa):** La señal `inc` incrementa en uno el dato de dirección guardado en el PC.
+b) **ALU (Unidad Aritmético Lógica):** La señal `opW` indica si se debe guardar el valor que llega al registro de los flags.
+c) **MicroOrgaSmall (DataPath):**
   - `DE_enOutImm`: habilita la entrada al bus de un valor inmediato.
-  - La señal `outData` indica qué registro se va a leer, y `inData` indica cuál se va a escribir.
+  -  La señal `outData` indica qué registro se va a leer, y `inData` indica cuál se va a escribir.
   
-- **ControlUnit (Unidad de control):** Los saltos condicionales se resuelven activando micro-operaciones específicas, comportándose como un JMP básico si está activo el flag correspondiente.
+d) **ControlUnit (Unidad de control):** Los saltos condicionales se resuelven activando micro-operaciones específicas, comportándose como un JMP básico si está activo el flag correspondiente.
 
 ## (3) Ensamblar y correr
 
@@ -70,10 +70,10 @@ El código guarda los valores dados (0xFF y 0x11) en `R0` y `R1`, respectivament
 Cada instrucción ocupará 16 bits en la memoria, y estarán ubicadas secuencialmente. Las etiquetas se reemplazarán por la dirección de memoria donde comienza la instrucción siguiente. En este caso, `seguir` se reemplaza por `0x02`, y `siguiente` por `0x06`.
 
 ### c) Cantidad de ciclos de clock necesarios para llegar a la instrucción `JMP halt`:
-Para el último `JMP halt` serían necesarios 45 ciclos de clock (finaliza en el ciclo 47).
+Para el último JMP halt` serían necesarios 45 ciclos de clock (finaliza en el ciclo 47).
 
 ### d) Cantidad de microinstrucciones necesarias para realizar el ADD y el salto:
-Para realizar el ADD son necesarias 5 microinstrucciones, mientras que para el salto son necesarias 2.
+Para realizar el `ADD` son necesarias 5 microinstrucciones, mientras que para el salto `JMP` son necesarias 2.
 
 ## (4) Ampliando la máquina
 
