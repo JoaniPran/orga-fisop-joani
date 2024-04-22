@@ -67,16 +67,16 @@ registro se va a escribir es la de `inData`, ubicadas en el componente Registers
 **d) ControlUnit (Unidad de control):** Los saltos condicionales son 3, y todos tienen un mecanismo similar, pero considerando diferentes ﬂags.
 se comportan como un JMP básico si está activo el ﬂag correspondiente.
 
-El código del JMP es el siguiente:
+El código del `JMP` es el siguiente:
 
 ```
 PC_load DE_enOutImm
 reset_microOp
 ```
 
-La primera linea carga un valor inmediato al PC, y luego, en la segunda línea, se hace un fetch de esa nueva
+La primera linea carga un valor inmediato al `PC`, y luego, en la segunda línea, se hace un fetch de esa nueva
 operación.
-Los saltos condicionales usan estas mismas dos líneas al ﬁnal de su ejecución. Por ejemplo, el código del JC
+Los saltos condicionales usan estas mismas dos líneas al ﬁnal de su ejecución. Por ejemplo, el código del `JC`
 es el siguiente:
 
 ```
@@ -103,16 +103,6 @@ Cada instrucción ocupará 16 bits en la memoria, y estarán ubicadas secuencial
 
 **c)** Cantidad de ciclos de clock necesarios para llegar a la instrucción `JMP halt`:
 Para el último JMP halt` serían necesarios 45 ciclos de clock (finaliza en el ciclo 47).
-
-empezamos en 0 : 
-`fetch` +5
-`JMP` +2
-`fetch` +5
-`SET` +2
-`fetch` + 5
-`SET` +2
-`fetch` +5
-`ADD` +5
 
 **d)** Cantidad de microinstrucciones necesarias para realizar el ADD y el salto:
 Para realizar el `ADD` son necesarias 5 microinstrucciones, mientras que para el salto `JMP` son necesarias 2.
