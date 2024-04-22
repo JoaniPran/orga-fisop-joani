@@ -42,37 +42,37 @@ c) **Desactivaciones y nuevas activaciones de `w`:**
 
 ## (2) OrgaSmall - Análisis
 
-a) **Tamaño de la memoria:**
+**a) Tamaño de la memoria:**
    El tamaño de la memoria es de 256 de 8 bits, es decir, 256 bytes.
 
-b) **Tamaño del PC:**
+**b) Tamaño del PC:**
    El PC tiene un tamaño de 8 bits, correspondiente a la cantidad de bits de las direcciones en la arquitectura.
 
-c) **Instrucciones nuevas respetando el formato de instrucción:**
+**c) Instrucciones nuevas respetando el formato de instrucción:**
    Se podrían agregar 10 nuevas instrucciones, dado que ya hay 22 declaradas y el máximo es de 32.
 
 ### Módulos indicados de hardware:
 
-a) **PC (Contador de Programa):** La señal `inc` incrementa en uno el dato de dirección guardado en el PC.
-b) **ALU (Unidad Aritmético Lógica):** La señal `opW` indica si se debe guardar el valor que llega al registro de los flags.
-c) **MicroOrgaSmall (DataPath):**
+**a) PC (Contador de Programa):** La señal `inc` incrementa en uno el dato de dirección guardado en el PC.
+**b) ALU (Unidad Aritmético Lógica):** La señal `opW` indica si se debe guardar el valor que llega al registro de los flags.
+**c) MicroOrgaSmall (DataPath):**
   - `DE_enOutImm`: habilita la entrada al bus de un valor inmediato.
   -  La señal `outData` indica qué registro se va a leer, y `inData` indica cuál se va a escribir.
   
-d) **ControlUnit (Unidad de control):** Los saltos condicionales se resuelven activando micro-operaciones específicas, comportándose como un JMP básico si está activo el flag correspondiente.
+**d) ControlUnit (Unidad de control):** Los saltos condicionales se resuelven activando micro-operaciones específicas, comportándose como un JMP básico si está activo el flag correspondiente.
 
-## (3) Ensamblar y correr
+** (3) Ensamblar y correr
 
-### a) Antes de correr el programa, identificar el comportamiento esperado:
+** a) Antes de correr el programa, identificar el comportamiento esperado:
 El código guarda los valores dados (0xFF y 0x11) en `R0` y `R1`, respectivamente. Luego, los suma y guarda el resultado en `R0`. Si se enciende el bit de carry, vuelve a la etiqueta siguiente y realiza la suma entre el resultado anterior y `R1`, guardándolo también en `R0`. Si esto no enciende el bit de carry, no se ejecuta el salto y pasa al último `JPM`, que se queda en un loop.
 
-### b) Ubicación de las instrucciones en la memoria:
+** b) Ubicación de las instrucciones en la memoria:
 Cada instrucción ocupará 16 bits en la memoria, y estarán ubicadas secuencialmente. Las etiquetas se reemplazarán por la dirección de memoria donde comienza la instrucción siguiente. En este caso, `seguir` se reemplaza por `0x02`, y `siguiente` por `0x06`.
 
-### c) Cantidad de ciclos de clock necesarios para llegar a la instrucción `JMP halt`:
+** c) Cantidad de ciclos de clock necesarios para llegar a la instrucción `JMP halt`:
 Para el último JMP halt` serían necesarios 45 ciclos de clock (finaliza en el ciclo 47).
 
-### d) Cantidad de microinstrucciones necesarias para realizar el ADD y el salto:
+** d) Cantidad de microinstrucciones necesarias para realizar el ADD y el salto:
 Para realizar el `ADD` son necesarias 5 microinstrucciones, mientras que para el salto `JMP` son necesarias 2.
 
 ## (4) Ampliando la máquina
