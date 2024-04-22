@@ -1,4 +1,4 @@
-# microlab
+# Microlab
 
 ## (1) Transferencia entre registros (repaso de secuenciales)
 
@@ -94,24 +94,24 @@ Los demás saltos condicionales funcionan de la misma manera, pero con los ﬂag
 
 ## (3) Ensamblar y correr
 
-**a) El código guarda los valores dados (0xFF y 0x11) en `R0` y `R1`, respectivamente. Luego, los suma y guarda el resultado en `R0`. Si se enciende el bit de carry, vuelve a la etiqueta `siguiente y realiza la suma entre el resultado anterior y `R1`, guardándolo denuevo en `R0`. Si esto no enciende el bit de carry, no se ejecuta el salto y pasa al último `JPM`, donde hace el salto a la etiqueta `halt`que es en si la misma, haciendo que quede en un loop.
+**a)** El código guarda los valores dados (0xFF y 0x11) en `R0` y `R1`, respectivamente. Luego, los suma y guarda el resultado en `R0`. Si se enciende el bit de carry, vuelve a la etiqueta `siguiente` y realiza la suma entre el resultado anterior y `R1`, guardándolo denuevo en `R0`. Si esto no enciende el bit de carry, no se ejecuta el salto y pasa al último `JPM`, donde hace el salto a la etiqueta `halt`que es en si la misma, haciendo que quede en un loop.
 
 **b) Ubicación de las instrucciones en la memoria:**
 Cada instrucción ocupará 16 bits en la memoria, y estarán ubicadas secuencialmente. Las etiquetas se reemplazarán por la dirección de memoria donde comienza la instrucción siguiente. En este caso, `seguir` se reemplaza por `0x02`, y `siguiente` por `0x06`.
 
 **c) Cantidad de ciclos de clock necesarios para llegar a la instrucción `JMP halt`:**
 Para el último JMP halt` serían necesarios 45 ciclos de clock (finaliza en el ciclo 47).
- - fectch +5
+ - Fectch +5
  - JMP +2
- - fetch +5
+ - Fetch +5
  - SET +2
- - fetch + 5
+ - Fetch + 5
  - SET +2
- - fetch +5
+ - Fetch +5
  - ADD +5 
- - fetch + 5
+ - Fetch + 5
  - JC +4
- - fetch +5
+ - Fetch +5
  - JMP +2
 
 **d) Cantidad de microinstrucciones necesarias para realizar el ADD y el salto:**
