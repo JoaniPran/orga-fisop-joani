@@ -55,13 +55,43 @@ Taller de microprogramación
 
 **a) PC (Contador de Programa):** La señal `inc` incrementa en uno el dato de dirección guardado en el PC.
 
-**b) ALU (Unidad Aritmético Lógica):** La señal `opW` indica si se debe guardar el valor que llega al registro de los flags.
+**b) ALU (Unidad Aritmético Lógica):** opw indica si se debe guardar el valor que le llega al registro de los flags. Juega el papel de w de los registros que vimos anteriormente
 
 **c) MicroOrgaSmall (DataPath):**
-  - `DE_enOutImm`: habilita la entrada al bus de un valor inmediato.
-  -  La señal `outData` indica qué registro se va a leer, y `inData` indica cuál se va a escribir.
+  - La señal `DE_enOutImm` habilita la entrada al bus de un valor inmediato. Esto signiﬁca que podemos
+ingresar al bus un valor que luego podemos usar para, por ejemplo, guardar en un registro, guardar en el
+`PC`, etc.
+  - La parte del circuito que indica que registro se va a leer es la entrada de `outData`, y la que indica que
+registro se va a escribir es la de `inData`, ubicadas en el componente Registers.
   
-**d) ControlUnit (Unidad de control):** Los saltos condicionales se resuelven activando micro-operaciones específicas, comportándose como un JMP básico si está activo el flag correspondiente.
+**d) ControlUnit (Unidad de control):** Los saltos condicionales son 3, y todos tienen un mecanismo similar, pero considerando diferentes ﬂags.
+se comportan como un JMP básico si está activo el ﬂag correspondiente.
+
+El código del JMP es el siguiente:
+
+```
+PC_load DE_enOutImm
+reset_microOp
+```
+
+La primera linea carga un valor inmediato al PC, y luego, en la segunda línea, se hace un fetch de esa nueva
+operación.
+Los saltos condicionales usan estas mismas dos líneas al ﬁnal de su ejecución. Por ejemplo, el código del JC
+es el siguiente:
+
+```
+JC_microOp load_microOp
+reset_microOp
+DE_enOutImm PC_load
+reset_microOp
+```
+
+La primera línea prende `JC_microOp` y `load_microOp`, con lo cual si el ﬂag de carry está prendido, no se
+carga en el `microPC` la siguiente micro-instrucción, sino la tercera, que es el inicio de un `JMP` básico. Si el
+ﬂag de carry no está prendido, entonces hace un fetch de la siguiente micro-instrucción sin efectuar el
+salto.
+Los demás saltos condicionales funcionan de la misma manera, pero con los ﬂags de zero y de negative.
+
 
 ## (3) Ensamblar y correr
 
@@ -73,6 +103,16 @@ Cada instrucción ocupará 16 bits en la memoria, y estarán ubicadas secuencial
 
 **c)** Cantidad de ciclos de clock necesarios para llegar a la instrucción `JMP halt`:
 Para el último JMP halt` serían necesarios 45 ciclos de clock (finaliza en el ciclo 47).
+
+empezamos en 0 : 
+`fetch` +5
+`JMP` +2
+`fetch` +5
+`SET` +2
+`fetch` + 5
+`SET` +2
+`fetch` +5
+`ADD` +5
 
 **d)** Cantidad de microinstrucciones necesarias para realizar el ADD y el salto:
 Para realizar el `ADD` son necesarias 5 microinstrucciones, mientras que para el salto `JMP` son necesarias 2.
