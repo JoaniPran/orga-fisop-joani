@@ -3,7 +3,7 @@ Taller de microprogramación
 
 ## (1) Transferencia entre registros (repaso de secuenciales)
 
-a) **Transferencia de datos:**
+**a) Transferencia de datos:**
    - `input_bit`: representa el dato que se desea guardar en el registro.
    - `en_input_bit`: controla la entrada del dato anterior. Un valor de 1 permite la entrada del dato `input_bit`, mientras que 0 no lo permite.
    - `w`: controla si el registro toma o guarda el valor enviado.
@@ -13,13 +13,13 @@ a) **Transferencia de datos:**
    **Salidas:**
    - `R0`, `R1`, `R2`: salidas de visualización del registro (el dato guardado). Su output es el último del componente.
 
-b) **Secuencia para que el registro R1 pase a tener el valor 1:**
+**b) Secuencia para que el registro R1 pase a tener el valor 1:**
    1. Activar el `clock`.
    2. Activar `input_bit`.
    3. Activar `en_input_bit`.
    4. Activar `w` del registro a 1.
 
-c) **Desactivaciones y nuevas activaciones de `w`:**
+**c) Desactivaciones y nuevas activaciones de `w`:**
    (Las desactivaciones de `w` se realizan por precaución)
    (Mantenemos activado el `clock` para simplificar la secuencia)
 
