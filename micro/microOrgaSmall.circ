@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project source="3.7.2" version="1.0">
-  This file is intended to be loaded by Logisim-evolution v3.7.2(https://github.com/logisim-evolution/).
+<project source="3.8.0" version="1.0">
+  This file is intended to be loaded by Logisim-evolution v3.8.0(https://github.com/logisim-evolution/).
 
   <lib desc="#Wiring" name="0">
     <tool name="Pin">
@@ -1207,17 +1207,17 @@
       <rect height="20" stroke="none" width="200" x="60" y="190"/>
       <rect fill="none" height="160" stroke="#000000" stroke-width="2" width="200" x="60" y="50"/>
       <text dominant-baseline="alphabetic" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="160" y="204">Registers</text>
-      <circ-anchor facing="east" height="6" width="6" x="267" y="177"/>
-      <circ-port height="10" pin="1210,650" width="10" x="45" y="135"/>
-      <circ-port height="10" pin="810,80" width="10" x="265" y="155"/>
-      <circ-port height="10" pin="930,140" width="10" x="265" y="175"/>
-      <circ-port height="8" pin="1090,750" width="8" x="266" y="136"/>
-      <circ-port height="8" pin="1150,690" width="8" x="266" y="76"/>
-      <circ-port height="8" pin="270,240" width="8" x="96" y="36"/>
-      <circ-port height="8" pin="270,270" width="8" x="126" y="36"/>
-      <circ-port height="8" pin="300,710" width="8" x="266" y="56"/>
-      <circ-port height="8" pin="300,760" width="8" x="266" y="96"/>
-      <circ-port height="8" pin="330,190" width="8" x="46" y="96"/>
+      <circ-anchor facing="east" x="270" y="180"/>
+      <circ-port dir="in" pin="1090,750" x="270" y="140"/>
+      <circ-port dir="in" pin="1150,690" x="270" y="80"/>
+      <circ-port dir="in" pin="270,240" x="100" y="40"/>
+      <circ-port dir="in" pin="270,270" x="130" y="40"/>
+      <circ-port dir="in" pin="300,710" x="270" y="60"/>
+      <circ-port dir="in" pin="300,760" x="270" y="100"/>
+      <circ-port dir="in" pin="330,190" x="50" y="100"/>
+      <circ-port dir="out" pin="1210,650" x="50" y="140"/>
+      <circ-port dir="out" pin="810,80" x="270" y="160"/>
+      <circ-port dir="out" pin="930,140" x="270" y="180"/>
     </appear>
     <comp lib="0" loc="(1090,750)" name="Pin">
       <a name="appearance" val="classic"/>
@@ -1459,7 +1459,7 @@
       <a name="appearance" val="logisim_evolution"/>
       <a name="label" val="R6"/>
     </comp>
-    <comp lib="8" loc="(1152,678)" name="Text">
+    <comp lib="8" loc="(1150,675)" name="Text">
       <a name="text" val="X"/>
     </comp>
     <wire from="(1040,690)" to="(1040,750)"/>
@@ -1605,15 +1605,15 @@
       <rect height="20" stroke="none" width="200" x="60" y="160"/>
       <rect fill="none" height="130" stroke="#000000" stroke-width="2" width="200" x="60" y="50"/>
       <text dominant-baseline="alphabetic" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="160" y="174">PC</text>
-      <circ-anchor facing="west" height="6" width="6" x="47" y="127"/>
-      <circ-port height="10" pin="450,340" width="10" x="265" y="55"/>
-      <circ-port height="10" pin="450,410" width="10" x="45" y="125"/>
-      <circ-port height="8" pin="140,370" width="8" x="266" y="116"/>
-      <circ-port height="8" pin="140,450" width="8" x="266" y="146"/>
-      <circ-port height="8" pin="160,240" width="8" x="96" y="36"/>
-      <circ-port height="8" pin="160,270" width="8" x="126" y="36"/>
-      <circ-port height="8" pin="200,410" width="8" x="46" y="86"/>
-      <circ-port height="8" pin="450,450" width="8" x="266" y="86"/>
+      <circ-anchor facing="west" x="50" y="130"/>
+      <circ-port dir="in" pin="140,370" x="270" y="120"/>
+      <circ-port dir="in" pin="140,450" x="270" y="150"/>
+      <circ-port dir="in" pin="160,240" x="100" y="40"/>
+      <circ-port dir="in" pin="160,270" x="130" y="40"/>
+      <circ-port dir="in" pin="200,410" x="50" y="90"/>
+      <circ-port dir="in" pin="450,450" x="270" y="90"/>
+      <circ-port dir="out" pin="450,340" x="270" y="60"/>
+      <circ-port dir="out" pin="450,410" x="50" y="130"/>
     </appear>
     <comp lib="0" loc="(140,370)" name="Pin">
       <a name="appearance" val="classic"/>
@@ -1741,22 +1741,22 @@
       <rect height="20" stroke="none" width="200" x="60" y="250"/>
       <rect fill="none" height="220" stroke="#000000" stroke-width="2" width="200" x="60" y="50"/>
       <text dominant-baseline="alphabetic" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="160" y="264">ALU</text>
-      <circ-anchor facing="east" height="6" width="6" x="267" y="67"/>
-      <circ-port height="10" pin="1270,590" width="10" x="265" y="65"/>
-      <circ-port height="10" pin="1270,860" width="10" x="45" y="115"/>
-      <circ-port height="10" pin="1370,70" width="10" x="45" y="235"/>
-      <circ-port height="10" pin="980,1120" width="10" x="45" y="55"/>
-      <circ-port height="10" pin="980,1160" width="10" x="45" y="85"/>
-      <circ-port height="8" pin="1230,490" width="8" x="266" y="216"/>
-      <circ-port height="8" pin="1230,640" width="8" x="266" y="186"/>
-      <circ-port height="8" pin="150,300" width="8" x="266" y="126"/>
-      <circ-port height="8" pin="150,450" width="8" x="266" y="156"/>
-      <circ-port height="8" pin="170,120" width="8" x="46" y="176"/>
-      <circ-port height="8" pin="170,90" width="8" x="46" y="146"/>
-      <circ-port height="8" pin="210,260" width="8" x="126" y="36"/>
-      <circ-port height="8" pin="210,410" width="8" x="186" y="36"/>
-      <circ-port height="8" pin="230,890" width="8" x="46" y="206"/>
-      <circ-port height="8" pin="270,1090" width="8" x="266" y="96"/>
+      <circ-anchor facing="east" x="270" y="70"/>
+      <circ-port dir="in" pin="1230,490" x="270" y="220"/>
+      <circ-port dir="in" pin="1230,640" x="270" y="190"/>
+      <circ-port dir="in" pin="150,300" x="270" y="130"/>
+      <circ-port dir="in" pin="150,450" x="270" y="160"/>
+      <circ-port dir="in" pin="170,120" x="50" y="180"/>
+      <circ-port dir="in" pin="170,90" x="50" y="150"/>
+      <circ-port dir="in" pin="210,260" x="130" y="40"/>
+      <circ-port dir="in" pin="210,410" x="190" y="40"/>
+      <circ-port dir="in" pin="230,890" x="50" y="210"/>
+      <circ-port dir="in" pin="270,1090" x="270" y="100"/>
+      <circ-port dir="out" pin="1270,590" x="270" y="70"/>
+      <circ-port dir="out" pin="1270,860" x="50" y="120"/>
+      <circ-port dir="out" pin="1370,70" x="50" y="240"/>
+      <circ-port dir="out" pin="980,1120" x="50" y="60"/>
+      <circ-port dir="out" pin="980,1160" x="50" y="90"/>
     </appear>
     <comp lib="0" loc="(1030,380)" name="Splitter">
       <a name="appear" val="right"/>
@@ -1904,11 +1904,24 @@
       <a name="facing" val="south"/>
       <a name="value" val="0x0"/>
     </comp>
+    <comp lib="0" loc="(560,1300)" name="Splitter">
+      <a name="fanout" val="8"/>
+      <a name="incoming" val="8"/>
+    </comp>
+    <comp lib="0" loc="(560,1400)" name="Splitter">
+      <a name="fanout" val="8"/>
+      <a name="incoming" val="8"/>
+    </comp>
     <comp lib="0" loc="(560,50)" name="Constant">
       <a name="value" val="0x0"/>
     </comp>
     <comp lib="0" loc="(690,250)" name="Tunnel">
       <a name="label" val="write_op"/>
+    </comp>
+    <comp lib="0" loc="(700,1260)" name="Splitter">
+      <a name="facing" val="west"/>
+      <a name="fanout" val="8"/>
+      <a name="incoming" val="8"/>
     </comp>
     <comp lib="0" loc="(700,170)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -2084,6 +2097,9 @@
     <comp lib="8" loc="(730,980)" name="Text">
       <a name="text" val="CONSTANTES"/>
     </comp>
+    <comp lib="8" loc="(767,1245)" name="Text">
+      <a name="text" val="MIX = 1010"/>
+    </comp>
     <wire from="(1000,190)" to="(1000,210)"/>
     <wire from="(1000,300)" to="(1000,310)"/>
     <wire from="(1000,310)" to="(1010,310)"/>
@@ -2138,7 +2154,9 @@
     <wire from="(340,960)" to="(510,960)"/>
     <wire from="(350,260)" to="(430,260)"/>
     <wire from="(350,410)" to="(400,410)"/>
+    <wire from="(400,1160)" to="(400,1400)"/>
     <wire from="(400,1160)" to="(980,1160)"/>
+    <wire from="(400,1400)" to="(560,1400)"/>
     <wire from="(400,410)" to="(400,490)"/>
     <wire from="(400,410)" to="(510,410)"/>
     <wire from="(400,490)" to="(400,570)"/>
@@ -2153,7 +2171,9 @@
     <wire from="(400,740)" to="(510,740)"/>
     <wire from="(400,810)" to="(400,1160)"/>
     <wire from="(400,810)" to="(510,810)"/>
+    <wire from="(430,1120)" to="(430,1300)"/>
     <wire from="(430,1120)" to="(980,1120)"/>
+    <wire from="(430,1300)" to="(560,1300)"/>
     <wire from="(430,260)" to="(430,390)"/>
     <wire from="(430,390)" to="(430,470)"/>
     <wire from="(430,390)" to="(510,390)"/>
@@ -2201,6 +2221,14 @@
     <wire from="(560,60)" to="(610,60)"/>
     <wire from="(570,70)" to="(570,510)"/>
     <wire from="(570,70)" to="(610,70)"/>
+    <wire from="(580,1220)" to="(670,1220)"/>
+    <wire from="(580,1240)" to="(620,1240)"/>
+    <wire from="(580,1260)" to="(610,1260)"/>
+    <wire from="(580,1280)" to="(680,1280)"/>
+    <wire from="(580,1330)" to="(630,1330)"/>
+    <wire from="(580,1350)" to="(650,1350)"/>
+    <wire from="(580,1370)" to="(640,1370)"/>
+    <wire from="(580,1390)" to="(660,1390)"/>
     <wire from="(580,80)" to="(580,590)"/>
     <wire from="(580,80)" to="(610,80)"/>
     <wire from="(590,120)" to="(590,830)"/>
@@ -2228,12 +2256,27 @@
     <wire from="(600,50)" to="(610,50)"/>
     <wire from="(600,90)" to="(600,100)"/>
     <wire from="(600,90)" to="(610,90)"/>
+    <wire from="(610,1260)" to="(610,1300)"/>
+    <wire from="(610,1300)" to="(680,1300)"/>
+    <wire from="(620,1240)" to="(620,1320)"/>
+    <wire from="(620,1320)" to="(680,1320)"/>
     <wire from="(630,1090)" to="(920,1090)"/>
+    <wire from="(630,1270)" to="(630,1330)"/>
+    <wire from="(630,1270)" to="(680,1270)"/>
     <wire from="(630,210)" to="(630,1090)"/>
+    <wire from="(640,1310)" to="(640,1370)"/>
+    <wire from="(640,1310)" to="(680,1310)"/>
+    <wire from="(650,1290)" to="(650,1350)"/>
+    <wire from="(650,1290)" to="(680,1290)"/>
     <wire from="(650,130)" to="(710,130)"/>
+    <wire from="(660,1330)" to="(660,1390)"/>
+    <wire from="(660,1330)" to="(680,1330)"/>
     <wire from="(660,150)" to="(660,250)"/>
     <wire from="(660,150)" to="(710,150)"/>
     <wire from="(660,250)" to="(690,250)"/>
+    <wire from="(670,1220)" to="(670,1340)"/>
+    <wire from="(670,1340)" to="(680,1340)"/>
+    <wire from="(700,1260)" to="(840,1260)"/>
     <wire from="(700,170)" to="(710,170)"/>
     <wire from="(700,210)" to="(740,210)"/>
     <wire from="(740,190)" to="(740,210)"/>
@@ -2263,6 +2306,8 @@
     <wire from="(830,520)" to="(900,520)"/>
     <wire from="(830,600)" to="(830,950)"/>
     <wire from="(830,600)" to="(900,600)"/>
+    <wire from="(840,610)" to="(840,1260)"/>
+    <wire from="(840,610)" to="(900,610)"/>
     <wire from="(860,630)" to="(860,1010)"/>
     <wire from="(860,630)" to="(900,630)"/>
     <wire from="(870,130)" to="(870,330)"/>
@@ -2271,10 +2316,8 @@
     <wire from="(870,640)" to="(870,1030)"/>
     <wire from="(870,640)" to="(900,640)"/>
     <wire from="(880,500)" to="(880,510)"/>
-    <wire from="(880,510)" to="(880,610)"/>
+    <wire from="(880,510)" to="(880,620)"/>
     <wire from="(880,510)" to="(900,510)"/>
-    <wire from="(880,610)" to="(880,620)"/>
-    <wire from="(880,610)" to="(900,610)"/>
     <wire from="(880,620)" to="(900,620)"/>
     <wire from="(880,650)" to="(880,1050)"/>
     <wire from="(880,650)" to="(900,650)"/>
@@ -2335,16 +2378,16 @@
       <rect height="20" stroke="none" width="200" x="61" y="180"/>
       <rect fill="none" height="150" stroke="#000000" stroke-width="2" width="200" x="60" y="50"/>
       <text dominant-baseline="alphabetic" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="163" y="195">Memory</text>
-      <circ-anchor facing="east" height="6" width="6" x="267" y="77"/>
-      <circ-port height="10" pin="800,540" width="10" x="45" y="115"/>
-      <circ-port height="8" pin="130,500" width="8" x="266" y="96"/>
-      <circ-port height="8" pin="140,220" width="8" x="96" y="36"/>
-      <circ-port height="8" pin="140,250" width="8" x="126" y="36"/>
-      <circ-port height="8" pin="140,280" width="8" x="156" y="36"/>
-      <circ-port height="8" pin="150,390" width="8" x="266" y="116"/>
-      <circ-port height="8" pin="180,370" width="8" x="46" y="156"/>
-      <circ-port height="8" pin="190,540" width="8" x="46" y="76"/>
-      <circ-port height="8" pin="800,580" width="8" x="266" y="76"/>
+      <circ-anchor facing="east" x="270" y="80"/>
+      <circ-port dir="in" pin="130,500" x="270" y="100"/>
+      <circ-port dir="in" pin="140,220" x="100" y="40"/>
+      <circ-port dir="in" pin="140,250" x="130" y="40"/>
+      <circ-port dir="in" pin="140,280" x="160" y="40"/>
+      <circ-port dir="in" pin="150,390" x="270" y="120"/>
+      <circ-port dir="in" pin="180,370" x="50" y="160"/>
+      <circ-port dir="in" pin="190,540" x="50" y="80"/>
+      <circ-port dir="in" pin="800,580" x="270" y="80"/>
+      <circ-port dir="out" pin="800,540" x="50" y="120"/>
     </appear>
     <comp lib="0" loc="(130,500)" name="Pin">
       <a name="appearance" val="classic"/>
@@ -2471,17 +2514,17 @@
       <rect height="20" stroke="none" width="200" x="60" y="150"/>
       <rect fill="none" height="120" stroke="#000000" stroke-width="2" width="200" x="60" y="50"/>
       <text dominant-baseline="alphabetic" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="160" y="164">Decode</text>
-      <circ-anchor facing="east" height="6" width="6" x="267" y="57"/>
-      <circ-port height="10" pin="750,220" width="10" x="265" y="55"/>
-      <circ-port height="10" pin="750,350" width="10" x="265" y="75"/>
-      <circ-port height="10" pin="750,480" width="10" x="265" y="95"/>
-      <circ-port height="10" pin="750,610" width="10" x="265" y="115"/>
-      <circ-port height="10" pin="750,730" width="10" x="265" y="135"/>
-      <circ-port height="8" pin="110,150" width="8" x="46" y="56"/>
-      <circ-port height="8" pin="140,150" width="8" x="46" y="76"/>
-      <circ-port height="8" pin="150,370" width="8" x="46" y="116"/>
-      <circ-port height="8" pin="150,500" width="8" x="46" y="136"/>
-      <circ-port height="8" pin="160,320" width="8" x="46" y="96"/>
+      <circ-anchor facing="east" x="270" y="60"/>
+      <circ-port dir="in" pin="110,150" x="50" y="60"/>
+      <circ-port dir="in" pin="140,150" x="50" y="80"/>
+      <circ-port dir="in" pin="150,370" x="50" y="120"/>
+      <circ-port dir="in" pin="150,500" x="50" y="140"/>
+      <circ-port dir="in" pin="160,320" x="50" y="100"/>
+      <circ-port dir="out" pin="750,220" x="270" y="60"/>
+      <circ-port dir="out" pin="750,350" x="270" y="80"/>
+      <circ-port dir="out" pin="750,480" x="270" y="100"/>
+      <circ-port dir="out" pin="750,610" x="270" y="120"/>
+      <circ-port dir="out" pin="750,730" x="270" y="140"/>
     </appear>
     <comp lib="0" loc="(110,150)" name="Pin">
       <a name="appearance" val="classic"/>
@@ -2837,30 +2880,30 @@
       <rect height="20" stroke="none" width="200" x="61" y="394"/>
       <rect fill="none" height="403" stroke="#000000" stroke-width="2" width="200" x="60" y="10"/>
       <text dominant-baseline="alphabetic" fill="#ffffff" font-family="Dialog" font-size="14" font-weight="bold" text-anchor="middle" x="161" y="408">controlUnit</text>
-      <circ-anchor facing="east" height="6" width="6" x="267" y="77"/>
-      <circ-port height="10" pin="1330,320" width="10" x="265" y="235"/>
-      <circ-port height="10" pin="1350,130" width="10" x="265" y="95"/>
-      <circ-port height="10" pin="1350,150" width="10" x="265" y="115"/>
-      <circ-port height="10" pin="1350,170" width="10" x="265" y="135"/>
-      <circ-port height="10" pin="1350,210" width="10" x="265" y="155"/>
-      <circ-port height="10" pin="1350,230" width="10" x="265" y="175"/>
-      <circ-port height="10" pin="1350,250" width="10" x="265" y="195"/>
-      <circ-port height="10" pin="1350,270" width="10" x="265" y="215"/>
-      <circ-port height="10" pin="1350,30" width="10" x="265" y="15"/>
-      <circ-port height="10" pin="1350,460" width="10" x="265" y="255"/>
-      <circ-port height="10" pin="1350,480" width="10" x="265" y="275"/>
-      <circ-port height="10" pin="1350,50" width="10" x="265" y="35"/>
-      <circ-port height="10" pin="1350,500" width="10" x="265" y="295"/>
-      <circ-port height="10" pin="1350,540" width="10" x="265" y="315"/>
-      <circ-port height="10" pin="1350,560" width="10" x="265" y="335"/>
-      <circ-port height="10" pin="1350,580" width="10" x="265" y="355"/>
-      <circ-port height="10" pin="1350,70" width="10" x="265" y="55"/>
-      <circ-port height="10" pin="1350,90" width="10" x="265" y="75"/>
-      <circ-port height="10" pin="550,40" width="10" x="265" y="375"/>
-      <circ-port height="8" pin="120,710" width="8" x="46" y="376"/>
-      <circ-port height="8" pin="340,570" width="8" x="46" y="26"/>
-      <circ-port height="8" pin="70,460" width="8" x="46" y="86"/>
-      <circ-port height="8" pin="70,490" width="8" x="46" y="116"/>
+      <circ-anchor facing="east" x="270" y="80"/>
+      <circ-port dir="in" pin="120,710" x="50" y="380"/>
+      <circ-port dir="in" pin="340,570" x="50" y="30"/>
+      <circ-port dir="in" pin="70,460" x="50" y="90"/>
+      <circ-port dir="in" pin="70,490" x="50" y="120"/>
+      <circ-port dir="out" pin="1330,320" x="270" y="240"/>
+      <circ-port dir="out" pin="1350,130" x="270" y="100"/>
+      <circ-port dir="out" pin="1350,150" x="270" y="120"/>
+      <circ-port dir="out" pin="1350,170" x="270" y="140"/>
+      <circ-port dir="out" pin="1350,210" x="270" y="160"/>
+      <circ-port dir="out" pin="1350,230" x="270" y="180"/>
+      <circ-port dir="out" pin="1350,250" x="270" y="200"/>
+      <circ-port dir="out" pin="1350,270" x="270" y="220"/>
+      <circ-port dir="out" pin="1350,30" x="270" y="20"/>
+      <circ-port dir="out" pin="1350,460" x="270" y="260"/>
+      <circ-port dir="out" pin="1350,480" x="270" y="280"/>
+      <circ-port dir="out" pin="1350,50" x="270" y="40"/>
+      <circ-port dir="out" pin="1350,500" x="270" y="300"/>
+      <circ-port dir="out" pin="1350,540" x="270" y="320"/>
+      <circ-port dir="out" pin="1350,560" x="270" y="340"/>
+      <circ-port dir="out" pin="1350,580" x="270" y="360"/>
+      <circ-port dir="out" pin="1350,70" x="270" y="60"/>
+      <circ-port dir="out" pin="1350,90" x="270" y="80"/>
+      <circ-port dir="out" pin="550,40" x="270" y="380"/>
     </appear>
     <comp lib="0" loc="(100,460)" name="Tunnel">
       <a name="label" val="clk"/>
@@ -3129,7 +3172,23 @@
       <a name="addrWidth" val="9"/>
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 9 32
-0
+400040 4200010 400040 2200010 40000000 80000000 10*0 102
+20a 1800 401 80000000 11*0 102 20a 2800
+401 80000000 11*0 102 20a 3800 401 80000000
+11*0 102 20a 4800 401 80000000 11*0 102
+20a 5800 401 80000000 11*0 102 20a 6800
+401 80000000 11*0 102 20a 7800 80000000 12*0
+b 80000000 14*0 102 d000 600 1000 401
+80000000 10*0 80000000 15*0 80000000 15*0 80000000 15*0
+80000000 15*0 80000000 15*0 80000000 15*0 1000040 22
+80000000 13*0 1000040 11 80000000 13*0 42 2a
+80000000 13*0 4a 11 80000000 13*0 1100000 80000000
+14*0 40010000 80000000 1100000 80000000 12*0 40020000 80000000
+1100000 80000000 12*0 40040000 80000000 1100000 80000000 12*0
+102 d800 600 1800 401 80000000 10*0 102
+d800 600 3800 401 80000000 10*0 102 8800
+401 80000000 12*0 102 9800 401 80000000 12*0
+80000000 15*0 80000000 15*0 80000000 15*0 1000001 80000000
 </a>
       <a name="dataWidth" val="32"/>
     </comp>

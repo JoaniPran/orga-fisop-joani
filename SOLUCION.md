@@ -120,3 +120,79 @@ Para realizar el `ADD` son necesarias 5 microinstrucciones, mientras que para el
 ## (4) Ampliando la máquina
 
 **a)** Se agregó la instrucción SIG, sus micro-instrucciones están en el archivo `microCode01.ops`, el código de ejemplo se encuentra en el archivo `test02.asm`. También se modificó el archivo `assembler.py` para que pueda funcionar correctamente la nueva instrucción.
+**b)** Fué agregado el circuito `MIX` a la `ALU` con el código de operación 01010, modificamos también los archivos `assembler.py`, `buildMicroOps.py` y `microCode.ops`. Se adjuntan las modificaiones:
+
+- Se agregó la instruccion `MIX`:
+
+```
+type_RR = ["ADD", "ADC", "SUB", "AND", "OR", "XOR", "CMP", "MOV", "MIX"]
+type_RM = ["STR", "LOAD"]
+type_M = ["JMP", "JC", "JZ", "JN"]
+type_R = ["INC", "DEC", "SIG"]
+type_RS = ["SHR", "SHL"]
+type_RI = ["SET"]
+def_DB = ["DB"]
+
+opcodes = {
+    "ADD": 1,
+    "ADC": 2,
+    "SUB": 3,
+    "AND": 4,
+    "OR": 5,
+    "XOR": 6,
+    "CMP": 7,
+    "MOV": 8,
+    "SIG": 9,
+    "MIX": 10,
+    "STR": 16,
+    "LOAD": 17,
+    "STRr": 18,
+    "LOADr": 19,
+    "JMP": 20,
+    "JC": 21,
+    "JZ": 22,
+    "JN": 23,
+    "INC": 24,
+    "DEC": 25,
+    "SHR": 26,
+    "SHL": 27,
+    "SET": 31
+}
+
+```
+- Las micro-instrucciones del `MIX` del `microCode01.ops`:
+
+```
+01010: ; MIX
+    RB_enOut  ALU_enA  RB_selectIndexOut=0
+    RB_enOut  ALU_enB  RB_selectIndexOut=1
+    ALU_OP=MIX
+    RB_enIn   ALU_enOut RB_selectIndexIn=0
+    reset_microOp
+```
+
+- Las modificaciones `buildMicroOps.py` son las siguientes: 
+
+```
+ALUops = {
+    "RESERVED0": 0,
+    "ADD": 1,
+    "ADC": 2,
+    "SUB": 3,
+    "AND": 4,
+    "OR": 5,
+    "XOR": 6,
+    "CMP": 7,
+    "SHR": 8,
+    "SHL": 9,
+    "MIX": 10,
+    "RESERVED11": 11,
+    "cte0x00": 12,
+    "cte0x01": 13,
+    "cte0x02": 14,
+    "cte0xFF": 15
+}
+```
+
+
+
