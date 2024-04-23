@@ -120,6 +120,7 @@ Para realizar el `ADD` son necesarias 5 microinstrucciones, mientras que para el
 ## (4) Ampliando la máquina
 
 **a)** Se agregó la instrucción SIG, sus micro-instrucciones están en el archivo `microCode01.ops`, el código de ejemplo se encuentra en el archivo `test02.asm`. También se modificó el archivo `assembler.py` para que pueda funcionar correctamente la nueva instrucción.
+
 **b)** Fué agregado el circuito `MIX` a la `ALU` con el código de operación 01010, modificamos también los archivos `assembler.py`, `buildMicroOps.py` y `microCode.ops`. Se adjuntan las modificaiones:
 
 - Se agregó la instruccion `MIX`:
