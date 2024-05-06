@@ -143,7 +143,8 @@ NOTES:
  *   Rating: 1
  */
 int bitAnd(int x, int y) {
-  return 2;
+  int res = (~x) | (~y);
+  return ~res;
 }
 /*
  * bitMatch - Create mask indicating which bits in x match those in y
@@ -154,7 +155,10 @@ int bitAnd(int x, int y) {
  *   Rating: 1
  */
 int bitMatch(int x, int y) {
-  return 2;
+  int op1 = x & y;
+  int op2 = ~(x | y);
+  int res = op1 | op2;
+  return res;
 }
 /*
  * bitNor - ~(x|y) using only ~ and &
@@ -164,7 +168,8 @@ int bitMatch(int x, int y) {
  *   Rating: 1
  */
 int bitNor(int x, int y) {
-  return 2;
+  int res = (~x) & (~y);
+  return res;
 }
 /*
  * bitXor - x^y using only ~ and &
@@ -174,7 +179,10 @@ int bitNor(int x, int y) {
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  return 2;
+  int op1 = x & y;
+  int op2 = (~x) & (~y);
+  int res = (~op1) & (~op2);
+  return res;
 }
 //2
 /*
@@ -186,7 +194,12 @@ int bitXor(int x, int y) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  return 2;
+  int m8 = 0xAA;
+  int m16 = m8 | m8 << 8;
+  int m32 = m16 | m16 << 16;
+  int op1 = x & m32;
+  int res = op1 ^ m32;
+  return !res;
 }
 /*
  * anyEvenBit - return 1 if any even-numbered bit in word set to 1
@@ -197,7 +210,11 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int anyEvenBit(int x) {
-  return 2;
+  int m8 = 0x55;
+  int m16 = m8 | m8 << 8;
+  int m32 = m16 | m16 << 16;
+  int res = x & m32;
+  return !!res;
 }
 /*
  * byteSwap - swaps the nth byte and the mth byte
@@ -209,7 +226,29 @@ int anyEvenBit(int x) {
  *  Rating: 2
  */
 int byteSwap(int x, int n, int m) {
-    return 2;
+    int shiftN, shiftM;
+    int mN, mM;
+    int byteN, byteM;
+    int mascaraAuxiliar1, mascaraAuxiliar2;
+    int res;
+
+    shiftN = n << 3;
+    shiftM = m << 3;
+    mN = 0xFF << shiftN;
+    mM = 0xFF << shiftM;
+    byteN = x & mN;
+    byteM = x & mM;
+    byteN = byteN >> shiftN;
+    byteM = byteM >> shiftM;
+    byteN = byteN & 0xFF;
+    byteM = byteM & 0xFF;
+    byteN = byteN << shiftM;
+    byteM = byteM << shiftN;
+
+    mascaraAuxiliar1 = byteN | byteM;
+    mascaraAuxiliar2 = x & (~(mN | mM));
+    res = mascaraAuxiliar1 | mascaraAuxiliar2;
+    return res;
 }
 /*
  * fitsBits - return 1 if x can be represented as an
@@ -221,7 +260,8 @@ int byteSwap(int x, int n, int m) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-  return 2;
+  int shift = 32 + (~n + 1); 
+  return !(x ^ ((x << shift) >> shift));
 }
 /*
  * negate - return -x
@@ -231,7 +271,14 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  int m8 = 0x01;
+  int m16 = m8 << 8;
+  int m32 = m16 << 16;
+  int negado_mas_uno;
+
+  m32 = m32 >> 24;
+  negado_mas_uno = ~x + m32;
+  return (negado_mas_uno); 
 }
 /*
  * sign - return 1 if positive, 0 if zero, and -1 if negative
@@ -242,7 +289,10 @@ int negate(int x) {
  *  Rating: 2
  */
 int sign(int x) {
-    return 2;
+  int op1 = x >> 31;
+  int op2 = !!x;
+  int res = op1 | op2;
+  return res;
 }
 //3
 /*
@@ -254,7 +304,12 @@ int sign(int x) {
  *   Rating: 3
  */
 int addOK(int x, int y) {
-  return 2;
+  int sum = x + y;
+  int sign_x = x >> 31;
+  int sign_y = y >> 31;
+  int sign_sum = sum >> 31;
+
+  return !((sign_x ^ sign_sum) & (sign_y ^ sign_sum));
 }
 /*
  * bitMask - Generate a mask consisting of all 1's
@@ -267,7 +322,27 @@ int addOK(int x, int y) {
  *   Rating: 3
  */
 int bitMask(int highbit, int lowbit) {
-  return 2;
+  int pre_condicion, condicion;
+  int mascara;
+  int primeraMascara, segundaMascara;
+  int resultado;
+
+  int m8 = 0xFF;
+  int m16 = m8 | m8 << 8;
+  int m_0xFFFFFFFF = m16 | m16 << 16;
+  int m_0xFFFFFF00 = m_0xFFFFFFFF << 8;
+  mascara = m_0xFFFFFF00 | 0xFE;
+
+  pre_condicion = (highbit + (~lowbit + 1));
+  pre_condicion = pre_condicion >> 31;
+  condicion = ~pre_condicion;
+
+  primeraMascara = mascara << highbit;
+  primeraMascara = ~primeraMascara;
+  segundaMascara = condicion << lowbit;
+  resultado = primeraMascara & segundaMascara;
+
+  return resultado;
 }
 /*
  * conditional - same as x ? y : z
@@ -277,7 +352,12 @@ int bitMask(int highbit, int lowbit) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+  int res;
+
+  x = !!x;
+  x = ~x + 1;
+  res = (x & y) | (~x & z);
+  return res;
 }
 /*
  * isAsciiDigit - return 1 if 0x30 <= x <= 0x39 (ASCII codes for characters '0' to '9')
@@ -289,7 +369,9 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+  int mayorIgualA0x30 = !((x + ~0x30 + 1) >> 31);
+  int menorIgualA0x39 = !((0x39 + ~x + 1) >> 31);
+  return (mayorIgualA0x30 & menorIgualA0x39);
 }
 /*
  * isGreater - if x > y  then return 1, else return 0
@@ -299,7 +381,12 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int isGreater(int x, int y) {
-  return 2;
+  int signo_x = x >> 31;
+  int signo_y = y >> 31;
+  int signo_diferente = signo_x & (!signo_y);
+  int signo_igual = (!(signo_x ^ signo_y)) & ((x + (~y + 1)) >> 31);
+  int son_iguales = !(x ^ y);
+  return !(son_iguales | signo_diferente | signo_igual);
 }
 /*
  * replaceByte(x,n,c) - Replace byte n in x with c
@@ -311,7 +398,11 @@ int isGreater(int x, int y) {
  *   Rating: 3
  */
 int replaceByte(int x, int n, int c) {
-  return 2;
+  int shift = n << 3;
+  int mascara = 0xFF << shift;
+  int ceros_en_posicion_a_cambiar = x & (~mascara);
+  int posicion_de_c = c << shift;
+  return (ceros_en_posicion_a_cambiar | posicion_de_c); 
 }
 //4
 /*
@@ -323,7 +414,8 @@ int replaceByte(int x, int n, int c) {
  *   Rating: 4
  */
 int absVal(int x) {
-  return 2;
+  int mascara = x >> 31;
+  return (x ^ mascara) + (~mascara + 1);
 }
 /*
  * bang - Compute !x without using !
@@ -333,7 +425,8 @@ int absVal(int x) {
  *   Rating: 4
  */
 int bang(int x) {
-  return 2;
+  int numero_a_negar = ((x | (~x + 1)) >> 31) & 1;
+  return ~numero_a_negar & 1;
 }
 /*
  * isNonZero - Check whether x is nonzero using
@@ -344,7 +437,7 @@ int bang(int x) {
  *   Rating: 4
  */
 int isNonZero(int x) {
-  return 2;
+  return ((x | (~x + 1)) >> 31) & 1;
 }
 /*
  * logicalNeg - implement the ! operator, using all of
@@ -355,7 +448,8 @@ int isNonZero(int x) {
  *   Rating: 4
  */
 int logicalNeg(int x) {
-  return 2;
+  int numero_a_negar = ((x | (~x + 1)) >> 31) & 1;
+  return ~numero_a_negar & 1;
 }
 //float
 /*
@@ -370,7 +464,15 @@ int logicalNeg(int x) {
  *   Rating: 2
  */
 unsigned floatAbsVal(unsigned uf) {
-  return 2;
+  unsigned mascaraSigno = 0x7FFFFFFF;
+  unsigned mascaraExp = 0x7F800000;
+  unsigned mascaraMantiza = 0x007FFFFF;
+
+  if ((uf & mascaraExp) == mascaraExp && (uf & mascaraMantiza) != 0) {
+    return uf;
+  }
+
+  return uf & mascaraSigno;
 }
 /*
  * floatIsEqual - Compute f == g for floating point arguments f and g.
@@ -383,9 +485,33 @@ unsigned floatAbsVal(unsigned uf) {
  *   Max ops: 25
  *   Rating: 2
  */
-int floatIsEqual(unsigned uf, unsigned ug) {
-    return 2;
+int floatIsEqual(unsigned uf, unsigned ug) { 
+  int respuesta;
+
+  int mascaraSigno = 0x80000000;
+  unsigned mascaraExp = 0x7F800000;
+  unsigned mascaraMantiza = 0x007FFFFF;
+
+  int ufEsCero = !(uf & (~mascaraSigno));
+  int ugEsCero = !(ug & (~mascaraSigno));
+
+  int uf_Nan = (uf & mascaraExp) == mascaraExp && (uf & mascaraMantiza) != 0;
+  int ug_Nan = (ug & mascaraExp) == mascaraExp && (ug & mascaraMantiza) != 0;
+
+  if(uf_Nan || ug_Nan) {
+    return 0;
+  }
+
+  if(uf == ug || (ufEsCero && ugEsCero)) {
+    respuesta = 1;
+  }
+  else {
+    respuesta = 0;
+  }
+
+  return respuesta;
 }
+
 /*
  * floatNegate - Return bit-level equivalent of expression -f for
  *   floating point argument f.
@@ -398,7 +524,21 @@ int floatIsEqual(unsigned uf, unsigned ug) {
  *   Rating: 2
  */
 unsigned floatNegate(unsigned uf) {
- return 2;
+  int signo;
+  unsigned ufNegado;
+
+  int mascaraSigno = 0x80000000;
+  unsigned mascaraExp = 0x7F800000;
+  unsigned mascaraMantiza = 0x007FFFFF;
+
+  if ((uf & mascaraExp) == mascaraExp && (uf & mascaraMantiza) != 0) {
+    return uf;
+  }
+
+  signo = (~uf) & mascaraSigno;
+  ufNegado = signo | (uf & (~mascaraSigno));
+
+ return ufNegado;
 }
 /*
  * floatIsLess - Compute f < g for floating point arguments f and g.
@@ -412,7 +552,44 @@ unsigned floatNegate(unsigned uf) {
  *   Rating: 3
  */
 int floatIsLess(unsigned uf, unsigned ug) {
-    return 2;
+  int signoUf;
+  int signoUg;
+  int signosIguales;
+  int respuesta;
+
+  int mascaraSigno = 0x80000000;
+  unsigned mascaraExp = 0x7F800000;
+  unsigned mascaraMantiza = 0x007FFFFF;
+
+  int ufEsCero = !(uf & (~mascaraSigno));
+  int ugEsCero = !(ug & (~mascaraSigno));
+
+  int uf_Nan = (uf & mascaraExp) == mascaraExp && (uf & mascaraMantiza) != 0;
+  int ug_Nan = (ug & mascaraExp) == mascaraExp && (ug & mascaraMantiza) != 0;
+
+  if(uf_Nan || ug_Nan || (ufEsCero && ugEsCero)) {
+    return 0;
+  }
+
+  signoUf = uf & mascaraSigno;
+  signoUg = ug & mascaraSigno;
+  signosIguales = signoUf == signoUg;
+
+  if(signosIguales) {
+    unsigned ufResto = uf & ~mascaraSigno;
+    unsigned ugResto = ug & ~mascaraSigno;
+    if(signoUf == 0) { 
+      respuesta = ufResto < ugResto;
+    }
+    else { 
+      respuesta = ufResto > ugResto;
+    }
+  }
+  else {
+    respuesta = signoUf < signoUg;
+  }
+
+  return respuesta;
 }
 /*
  * floatFloat2Int - Return bit-level equivalent of expression (int) f
@@ -427,7 +604,41 @@ int floatIsLess(unsigned uf, unsigned ug) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
-  return 2;
+  int signo = ((uf >> 31) & 1);
+  int exp = ((uf >> 23) & 0xFF);
+  int frac = (uf & 0x7FFFFF);
+  int bias = 127;
+  int e;
+  int resultado;
+
+  if (exp < bias) {
+    return 0;
+  }
+
+  if (exp >= (bias + 31)) {
+    return 0x80000000u;
+  }
+
+  frac = frac | 0x800000; 
+
+  e = exp + ~bias + 1;
+
+  if (e < 23) {
+    frac >>= (23 + ~e + 1 );
+  } else {
+    frac <<= (e + ~23 + 1 );
+  }
+
+  if ((frac >> 31) & 1) {
+    return 0x80000000u;
+  }
+
+  resultado = frac;
+  if (signo) {
+    resultado = ~resultado + 1; 
+  }
+
+  return resultado;
 }
 /*
  * floatPower2 - Return bit-level equivalent of the expression 2.0^x
@@ -443,5 +654,18 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 4
  */
 unsigned floatPower2(int x) {
-    return 2;
+  unsigned INF = 0xFF << 23; 
+  unsigned exp;
+
+  if (x < -149) { 
+      return 0;
+  } else if (x > 127) { 
+      return INF;
+  } else if (x < -126) { 
+      exp = 1 << (x + 149);
+  } else { 
+      exp = (x + 127) << 23;
+  }
+
+  return exp;
 }
