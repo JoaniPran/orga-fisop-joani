@@ -26,9 +26,26 @@ global cardNew
 
 section .text
 
+extern malloc
+
 ; ** String **
 ;char* strClone(char* a);
 strClone:
+    push rbp
+    mov rbp, rsp
+    push r12
+    sub rsp, 8
+
+    mov r12, [rdi] ;r12 guarda lo que tiene guardado el puntero char* a
+
+    mov rdi, 1
+    call malloc ;ahora en rax tenemos el char* nuevo
+
+    mov [rax], r12
+
+    add rsp, 8
+    pop r12
+    pop rbp
 ret
 
 ;void strPrint(char* a, FILE* pFile)
