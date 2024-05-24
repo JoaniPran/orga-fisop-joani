@@ -8,12 +8,6 @@
 #include "lib.h"
 
 int main (void){    
-    /*char *string = "VAMOSSS RIVERRR";
-    char *copy = strClone(string);
-    assert(*string == *copy);
-    assert(string != copy);
-    free(copy);
-    printf("Exito\n");*/
     return 0;
 }
 

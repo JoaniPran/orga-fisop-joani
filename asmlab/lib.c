@@ -77,12 +77,15 @@ funcPrint_t *getPrintFunction(type_t t)
 
 int32_t intCmp(int32_t *a, int32_t *b)
 {
-    if(*a == *b) 
+    if(*a == *b) {
         return 0;
-    else if(*a < *b)
+    } 
+    else if(*a < *b) {
         return 1;
-    else if(*a > *b)
+    }
+    else if(*a > *b) {
         return -1;
+    }
 }
 
 void intDelete(int32_t *a)
@@ -198,12 +201,18 @@ void listAddLast(list_t *l, void *data)
 
 list_t *listClone(list_t *l)
 {
-    list_t *nuevaLista = (list_t*) malloc(sizeof(list_t));
+    list_t *nuevaLista = listNew(l->type);
 
-    nuevaLista->type = l->type;
-    nuevaLista->first = l->first;
-    nuevaLista->last = l->last;
-    nuevaLista->size = l->size;
+    if(l->size != 0) {
+        listElem_t* nodoActual = l->first;
+        uint8_t contador = 1;
+
+        while(contador <= l->size) {
+            listAddLast(nuevaLista, nodoActual->data);
+            nodoActual = nodoActual->next;
+            contador++;
+        }
+    }
 
     return nuevaLista;
 }
@@ -298,10 +307,52 @@ void listSwap(list_t *l, uint8_t i, uint8_t j)
 
 void listDelete(list_t *l)
 {
+    if (l == NULL) return;
+
+    funcDelete_t * funcionDelete = getDeleteFunction(l->type);
+
+    if (funcionDelete == NULL){
+    return;
+    }   
+
+    listElem_t* nodoActual = l->first;
+    listElem_t* next;
+    
+    while (nodoActual != NULL) {
+        next = nodoActual->next;
+        funcionDelete(nodoActual->data);
+        free(nodoActual);
+        nodoActual = next;
+    }
+
+    l->first = NULL;
+    l->last = NULL;
+    l->size = 0;
+
+    free(l);
 }
 
 void listPrint(list_t *l, FILE *pFile)
 {
+    if (l == NULL || pFile == NULL) {
+        return;
+    }
+    funcPrint_t *printFunction = getPrintFunction(l->type);
+
+    if (printFunction == NULL) {
+        return;
+    }
+    fprintf(pFile, "[");
+    listElem_t* nodoActual = l->first;
+    while (nodoActual != NULL) {
+        
+        printFunction(nodoActual->data, pFile);
+        nodoActual = nodoActual->next;
+        if (nodoActual != NULL) {
+            fprintf(pFile, ", ");
+        }
+    }
+    fprintf(pFile, "]");
 }
 
 /** Game **/
