@@ -32,6 +32,7 @@ section .text
 extern malloc
 extern free
 extern fprintf
+extern getCloneFunction
 
 ; ** String **
 ;char* strClone(char* a);
@@ -191,6 +192,43 @@ ret
 
 ; void arrayAddLast(array_t* a, void* data)
 arrayAddLast:
+    push rbp
+    mov rbp, rsp
+    push r12
+    push r13
+
+    mov rcx, [rdi + 4]
+    cmp [rdi + 5], cl
+    je .fin
+
+    mov r12, rdi
+    mov r13, rsi
+
+    mov rdi, [r12]
+    call getCloneFunction
+
+    mov rdi, r13
+    call rax
+
+    mov rcx, [r12 + 8]
+    xor rdx, rdx
+
+    .loop :
+        cmp dword [rcx + 8*rdx], 0
+        je .finloop
+        inc rdx
+        jmp .loop
+    .finloop: 
+
+    mov [rcx + 8*rdx], rax
+
+    inc byte [r12 + 4]
+
+    .fin:
+
+    pop r13
+    pop r12
+    pop rbp
 ret
 
 ; void* arrayGet(array_t* a, uint8_t i)
@@ -223,6 +261,16 @@ arrayNew:
 
     mov [r14 + 8], rax
 
+    xor rcx, rcx
+    .loop:
+        cmp rcx, r13
+        je .fin
+        mov rdx, [r14 + 8]
+        mov qword [rdx + 8*rcx], 0
+        inc rcx
+        jmp .loop
+    .fin:
+
     mov rax, r14
 
     add rsp, 8
@@ -234,6 +282,32 @@ ret
 
 ; void* arrayRemove(array_t* a, uint8_t i)
 arrayRemove:
+    push rbp
+    mov rbp, rsp
+    push r12
+    push r13
+
+    ;cmp rsi, [rdi + 5]
+    cmp byte [rdi + 5], sil
+    jl .fueraRango
+
+    mov rdx, [rdi + 8]
+    mov qword rcx, [rdx + 8*rsi]
+    mov qword [rdx + 8*rsi], 0
+    dec byte [rdi + 4]
+    jmp .fin1
+    
+    .fueraRango:
+        xor rcx, rcx
+
+    .fin1: 
+        mov rax, rcx
+
+    .fin:    
+
+    pop r13
+    pop r12
+    pop rbp
 ret
 
 ; void arraySwap(array_t* a, uint8_t i, uint8_t j)
