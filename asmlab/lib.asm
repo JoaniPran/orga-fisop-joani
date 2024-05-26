@@ -33,6 +33,12 @@ extern malloc
 extern free
 extern fprintf
 extern getCloneFunction
+extern getDeleteFunction
+extern intClone
+extern listNew
+extern listDelete
+extern listClone
+extern listAddFirst
 
 ; ** String **
 ;char* strClone(char* a);
@@ -188,6 +194,13 @@ ret
 
 ; uint8_t arrayGetSize(array_t* a)
 arrayGetSize:
+    push rbp
+    mov rbp, rsp
+
+    movzx eax, byte [rdi + 4] ; Mueve un valor de 8 bits a eax y extiende a 32 bits con ceros
+
+    pop rbp
+    ret
 ret
 
 ; void arrayAddLast(array_t* a, void* data)
@@ -233,6 +246,27 @@ ret
 
 ; void* arrayGet(array_t* a, uint8_t i)
 arrayGet:
+    push rbp
+    mov rbp, rsp
+
+    ; Verificar si i está fuera de rango (i >= size)
+    movzx rcx, byte [rdi + 4] ; Mover el tamaño del array (size) a rcx y extenderlo a 64 bits
+    cmp rsi, rcx              ; Comparar el índice i (rsi) con el tamaño del array (rcx)
+    jae .fueraRango           ; Saltar a .fueraRango si i >= size
+
+    ; Obtener el puntero al array de datos
+    mov rcx, [rdi + 8]        ; Mover el puntero al array de datos a rcx
+
+    ; Obtener el elemento del array en la posición i
+    mov rax, [rcx + rsi*8]    ; Mover el elemento en la posición i a rax
+
+    jmp .fin                  ; Saltar a .fin
+
+    .fueraRango:
+        xor rax, rax              ; Establecer rax a 0 (NULL) si fuera de rango
+
+    .fin:
+        pop rbp
 ret
 
 ; array_t* arrayNew(type_t t, uint8_t capacity)
@@ -284,29 +318,22 @@ ret
 arrayRemove:
     push rbp
     mov rbp, rsp
-    push r12
-    push r13
 
-    ;cmp rsi, [rdi + 5]
     cmp byte [rdi + 5], sil
-    jl .fueraRango
+    jle .fueraRango
 
     mov rdx, [rdi + 8]
     mov qword rcx, [rdx + 8*rsi]
     mov qword [rdx + 8*rsi], 0
     dec byte [rdi + 4]
-    jmp .fin1
+    jmp .fin
     
     .fueraRango:
         xor rcx, rcx
 
-    .fin1: 
-        mov rax, rcx
+    .fin: 
+        mov rax, rcx  
 
-    .fin:    
-
-    pop r13
-    pop r12
     pop rbp
 ret
 
@@ -316,6 +343,39 @@ ret
 
 ; void arrayDelete(array_t* a) {
 arrayDelete:
+    push rbp
+    mov rbp, rsp
+    push r12 
+    push r13 
+  
+    xor r13, r13
+    xor r12, r12
+    xor rcx, rcx
+
+    mov r13, rdi 
+    call getDeleteFunction
+
+    mov rdi, [r13 + 8]
+
+    .loop :
+        cmp qword [rdi + 8*rcx], 0
+        je .finloop
+        mov [rdi + 8*rcx], rax
+        inc rcx
+        jmp .loop
+    .finloop: 
+    
+    ;en el loop solo elimino a lo que apunta cada posicion del array osea el contenido, 
+    ;con el call free me aseguro de eliminar el array cada posicion suceciva donde almacenaba los datos
+
+    call free  ; Liberar la memoria del array
+
+    mov dword [r13 + 4], 0  ; Restablecer size
+    mov dword [r13 + 5], 0  ; Restablecer capacity
+
+    pop r13
+    pop r12
+    pop rbp
 ret
 
 ;void arrayPrint(array_t* a, FILE* pFile)
@@ -326,6 +386,39 @@ ret
 
 ; card_t* cardNew(char* suit, int32_t* number)
 cardNew:
+    push rbp
+    mov rbp, rsp
+    push r12
+    push r13
+    push r14
+    sub rsp, 8
+
+    mov r12, rdi
+    mov r13, rsi
+
+    mov rdi, 24
+    call malloc   ;rax guarda el puntero que tiene 24 bytes de espacio, puntero a la estructura array
+    mov r14, rax
+
+    mov rdi, r12  ;muevo a rdi el registro r12 strClone(suit)
+    call strClone
+    mov qword [r14], rax
+
+    mov rdi, r13
+    call intClone
+    mov qword [r14 + 8], rax
+
+    mov rdi, 3
+    call listNew
+    mov qword [r14 + 16], rax
+
+    mov rax, r14
+
+    add rsp, 8
+    pop r14
+    pop r13
+    pop r12
+    pop rbp
 ret
 
 ;char* cardGetSuit(card_t* c)
@@ -340,11 +433,9 @@ ret
 cardGetStacked:
 ret
 
-
 ;void cardPrint(card_t* c, FILE* pFile)
 cardPrint:
 ret
-
 
 ;int32_t cardCmp(card_t* a, card_t* b)
 cardCmp:
@@ -352,13 +443,74 @@ ret
 
 ;card_t* cardClone(card_t* c)
 cardClone:
+    push rbp
+    mov rbp, rsp
+    push r12
+    push r13
+
+    mov r12, rdi
+
+    mov qword rdi, [r12]
+    mov qword rsi, [r12 + 8]
+    call cardNew
+    mov r13, rax
+
+    mov qword rdi, [r13 + 16]
+    call listDelete
+
+    mov qword rdi, [r12 + 16]
+    call listClone
+    mov qword [r13 + 16], rax
+
+    mov rax, r13
+
+    pop r13
+    pop r12
+    pop rbp
 ret
 
 ;void cardAddStacked(card_t* c, card_t* card)
 cardAddStacked:
+    push rbp
+    mov rbp, rsp
+    push r12
+
+    mov r12, rdi
+
+    mov rdi, [r12 + 16]
+    call listAddFirst 
+
+    pop r12
+    pop rbp
 ret
 
 ;void cardDelete(card_t* c)
 cardDelete:
+    push rbp
+    mov rbp, rsp
+    push r12
+    push r13
+
+    mov r12, rdi
+
+    mov rdi, 2
+    call getDeleteFunction
+    mov qword rdi, [r12]
+    call rax
+
+    mov rdi, 1
+    call getDeleteFunction
+    mov qword rdi, [r12 + 8]
+    call rax
+
+    mov qword rdi, [r12 + 16]
+    call listDelete
+
+    mov rdi, r12
+    call free
+
+    pop r13
+    pop r12
+    pop rbp
 ret
 
