@@ -266,52 +266,27 @@ void *listRemove(list_t *l, uint8_t i)
     return actualData;
 }
 
-void listSwap(list_t *l, uint8_t i, uint8_t j)
+void  listSwap(list_t* l, uint8_t i, uint8_t j) 
 {
-    if (i == j || l->size == 0 || l->size == 1 || i >= l->size || j >= l->size) {
+    if (i >= l->size || j >= l->size) {
         return;
     }
 
-    listElem_t *prevI = NULL, *prevJ = NULL;
-    listElem_t *nodoI = l->first, *nodoJ = l->first;
-    listElem_t *temp = NULL;
+    listElem_t* elementoI = l->first;
+    listElem_t* elementoJ = l->first;
 
-    // Encuentra los nodos y sus predecesores
-    for (uint8_t k = 0; k < i; k++) {
-        prevI = nodoI;
-        nodoI = nodoI->next;
+    for (int contador = 0; contador < i; contador++) {
+        elementoI = elementoI->next;
+    }
+    for (int contador = 0; contador < j; contador++) {
+        elementoJ = elementoJ->next;
     }
 
-    for (uint8_t k = 0; k < j; k++) {
-        prevJ = nodoJ;
-        nodoJ = nodoJ->next;
-    }
-
-    // Si uno de los nodos es el primer nodo, actualizar `first`
-    if (prevI != NULL) {
-        prevI->next = nodoJ;
-    } else {
-        l->first = nodoJ;
-    }
-
-    if (prevJ != NULL) {
-        prevJ->next = nodoI;
-    } else {
-        l->first = nodoI;
-    }
-
-    // Intercambia los punteros `next` de nodoI y nodoJ
-    temp = nodoI->next;
-    nodoI->next = nodoJ->next;
-    nodoJ->next = temp;
-
-    // Actualiza `last` si es necesario
-    if (nodoI->next == NULL) {
-        l->last = nodoI;
-    } else if (nodoJ->next == NULL) {
-        l->last = nodoJ;
-    }
+    void* auxiliar = elementoI->data;
+    elementoI->data = elementoJ->data;
+    elementoJ->data = auxiliar;
 }
+
 
 void listDelete(list_t *l)
 {
