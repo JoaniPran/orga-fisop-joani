@@ -412,49 +412,47 @@ ret
 
 ; void arrayDelete(array_t* a) {
 arrayDelete:
+
     push rbp
-    mov rbp, rsp
-    push r12 
-    push r13
-    push r14 
-    sub rsp,8
+        mov rbp, rsp
+        push r12
+        push r13
+        push r14
+        push r15
 
-    xor r13, r13
-    xor r12, r12
-    xor r14, r14
-    xor rcx, rcx
+        movzx r12, byte [rdi + 4] 
+        mov r13, [rdi + 8]
+        mov r14, rdi
 
-    mov r13, rdi
-    
-     
-    mov qword rdi, [ r13 ]
-    call getDeleteFunction
+        mov rdi, [rdi]
+        call getDeleteFunction 
 
-    ; mov rdi, [r13 + 8]
-    mov qword r12, [r13 + 8]
+        mov r15, rax
 
-    .loop :
-        cmp qword [r12 + 8*r14], 0
-        je .finloop
-        ; mov [rdi + 8*r14], rax
-        mov qword rdi,[r12 + 8*r14] 
-        call rax
-        inc r14
-        jmp .loop
-    .finloop: 
-    
-    
-    mov qword rdi, [ r13 + 8 ]
-    call free
+        arrayLoop:
+        cmp r12, 0
+        je arrayLoopFin
 
-    mov rdi, r13
-    call free  ; Liberar la memoria del array
+        dec r12
+        mov rdi, [r13 + 8*r12]
+        call r15
 
-    add rsp, 8
-    pop r14
-    pop r13
-    pop r12
-    pop rbp
+        mov rdi, r14
+        jmp arrayLoop
+        
+        arrayLoopFin:
+
+        mov rdi, r13
+        call free
+        
+        mov rdi, r14
+        call free
+
+        pop r15
+        pop r14
+        pop r13
+        pop r12
+        pop rbp
 ret
 
 ;void arrayPrint(array_t* a, FILE* pFile)
