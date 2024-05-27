@@ -77,15 +77,18 @@ funcPrint_t *getPrintFunction(type_t t)
 
 int32_t intCmp(int32_t *a, int32_t *b)
 {
+    int32_t resultado = 0;
     if(*a == *b) {
-        return 0;
+        resultado = 0;
     } 
     else if(*a < *b) {
-        return 1;
+        resultado = 1;
     }
     else if(*a > *b) {
-        return -1;
+        resultado = -1;
     }
+
+    return resultado;
 }
 
 void intDelete(int32_t *a)
@@ -95,7 +98,7 @@ void intDelete(int32_t *a)
 
 void intPrint(int32_t *a, FILE *pFile)
 {
-    fprintf(pFile, "%d\n", *a);
+    fprintf(pFile, "%d", *a);
 }
 
 int32_t *intClone(int32_t *a)
@@ -178,7 +181,7 @@ void listAddLast(list_t *l, void *data)
     //Lista vacia
     if(l->first == NULL) 
     {
-        nuevoNodo->next = l->first;
+        nuevoNodo->next = NULL;
         nuevoNodo->prev = NULL;
         l->first = nuevoNodo;
         l->last = nuevoNodo;
@@ -186,16 +189,11 @@ void listAddLast(list_t *l, void *data)
     //Lista con elementos
     else
     {
-        listElem_t *actual = l->first;
-        while(actual->next != NULL) {
-            actual = actual->next;
-        }
-        actual->next = nuevoNodo;
+        l->last->next = nuevoNodo;
+        nuevoNodo->prev = l->last;
         nuevoNodo->next = NULL;
-        nuevoNodo->prev = actual;
         l->last = nuevoNodo;
     }
-
     l->size++;
 }
 
@@ -219,11 +217,14 @@ list_t *listClone(list_t *l)
 
 void *listRemove(list_t *l, uint8_t i)
 {
-    if(i > (l->size-1))
-        return 0;
-    
     int contador = 0;
-    listElem_t *actual = l->first;
+    listElem_t *actual = NULL;
+    listElem_t *nodoSiguiente = NULL;
+
+    if(i > (l->size-1))
+        return NULL;
+
+    actual = l->first;
 
     while(contador != i) {
         actual = actual->next;
@@ -237,11 +238,13 @@ void *listRemove(list_t *l, uint8_t i)
     }
     //Lista con mas de un elemento y borro el primero
     else if(actual == l->first) {
-        l->first = actual->next;
-        actual->next->prev = NULL;
+        nodoSiguiente = actual->next;
+        l->first = nodoSiguiente;
+        nodoSiguiente->prev = NULL;
     }
     //Lista con mas de un elemento y borro el ultimo
     else if(actual->next == NULL) {
+        l->last = actual->prev;
         actual->prev->next = NULL;
     }
     //Lista con mas de un elemento y borro uno del medio
@@ -250,10 +253,15 @@ void *listRemove(list_t *l, uint8_t i)
         actual->next->prev = actual->prev;
     }
 
-    void* actualData = actual->data;
-    free(actual);
+    funcClone_t *funcionClonar = getCloneFunction(l->type);
+    void* actualData = funcionClonar(actual->data);
 
     l->size--;
+
+    funcDelete_t *funcionDelete = getDeleteFunction(l->type);
+    funcionDelete(actual->data);
+    
+    free(actual);
 
     return actualData;
 }
@@ -307,13 +315,7 @@ void listSwap(list_t *l, uint8_t i, uint8_t j)
 
 void listDelete(list_t *l)
 {
-    if (l == NULL) return;
-
     funcDelete_t * funcionDelete = getDeleteFunction(l->type);
-
-    if (funcionDelete == NULL){
-    return;
-    }   
 
     listElem_t* nodoActual = l->first;
     listElem_t* next;
@@ -334,9 +336,6 @@ void listDelete(list_t *l)
 
 void listPrint(list_t *l, FILE *pFile)
 {
-    if (l == NULL || pFile == NULL) {
-        return;
-    }
     funcPrint_t *printFunction = getPrintFunction(l->type);
 
     if (printFunction == NULL) {
@@ -345,11 +344,10 @@ void listPrint(list_t *l, FILE *pFile)
     fprintf(pFile, "[");
     listElem_t* nodoActual = l->first;
     while (nodoActual != NULL) {
-        
         printFunction(nodoActual->data, pFile);
         nodoActual = nodoActual->next;
         if (nodoActual != NULL) {
-            fprintf(pFile, ", ");
+            fprintf(pFile, ",");
         }
     }
     fprintf(pFile, "]");

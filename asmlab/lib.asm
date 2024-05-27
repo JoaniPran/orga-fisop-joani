@@ -26,7 +26,14 @@ global cardNew
 
 section .data
 null: db "NULL",0
-formato: db "%s\n", 0
+stringFormato: db "%s", 0
+corcheteApertura: db "[", 0
+corcheteCierre: db "]", 0
+coma: db ",", 0
+llaveApertura db "{",0
+llaveCierre db "}",0
+guion db "-",0
+intFormato db "%i",0
 
 section .text
 extern malloc
@@ -34,11 +41,14 @@ extern free
 extern fprintf
 extern getCloneFunction
 extern getDeleteFunction
+extern getCompareFunction
+extern getPrintFunction
 extern intClone
 extern listNew
 extern listDelete
 extern listClone
 extern listAddFirst
+extern listPrint
 
 ; ** String **
 ;char* strClone(char* a);
@@ -92,15 +102,17 @@ strPrint:
     je .fin
 
     mov rdi, rsi
-    mov rsi, formato
+    mov rsi, stringFormato
     mov rdx, r12
+    mov al, 0
     call fprintf
     jmp .final
 
     .fin:
     mov rdi, rsi
-    mov rsi, formato
+    mov rsi, stringFormato
     mov rdx, null
+    mov al, 0
     call fprintf
 
     .final:
@@ -226,7 +238,7 @@ arrayAddLast:
     mov rcx, [r12 + 8]
     xor rdx, rdx
 
-    .loop :
+    .loop:
         cmp dword [rcx + 8*rdx], 0
         je .finloop
         inc rdx
@@ -249,24 +261,22 @@ arrayGet:
     push rbp
     mov rbp, rsp
 
-    ; Verificar si i está fuera de rango (i >= size)
-    movzx rcx, byte [rdi + 4] ; Mover el tamaño del array (size) a rcx y extenderlo a 64 bits
-    cmp rsi, rcx              ; Comparar el índice i (rsi) con el tamaño del array (rcx)
+    movzx rcx, byte [rdi + 4]
+    cmp rsi, rcx              
     jae .fueraRango           ; Saltar a .fueraRango si i >= size
 
-    ; Obtener el puntero al array de datos
-    mov rcx, [rdi + 8]        ; Mover el puntero al array de datos a rcx
+    mov rcx, [rdi + 8]   
 
-    ; Obtener el elemento del array en la posición i
-    mov rax, [rcx + rsi*8]    ; Mover el elemento en la posición i a rax
+    mov rax, [rcx + rsi*8]   
 
-    jmp .fin                  ; Saltar a .fin
+    jmp .fin               
 
     .fueraRango:
         xor rax, rax              ; Establecer rax a 0 (NULL) si fuera de rango
 
     .fin:
-        pop rbp
+
+    pop rbp
 ret
 
 ; array_t* arrayNew(type_t t, uint8_t capacity)
@@ -318,15 +328,36 @@ ret
 arrayRemove:
     push rbp
     mov rbp, rsp
+    push r12
+    push r13
+    push r14
+    push r15
 
-    cmp byte [rdi + 5], sil
+    xor r14, r14
+    xor r15, r15
+
+    cmp [rdi + 4], sil
     jle .fueraRango
 
     mov rdx, [rdi + 8]
     mov qword rcx, [rdx + 8*rsi]
     mov qword [rdx + 8*rsi], 0
+
     dec byte [rdi + 4]
-    jmp .fin
+
+    mov r14b, [rdi + 4]
+
+    .loop:
+        cmp sil, r14b
+        je .fin
+        mov r12, [rdx + 8*rsi]
+        inc rsi
+        mov r13, [rdx + 8*rsi]
+        dec rsi
+        mov [rdx + 8*rsi], r13
+        inc rsi
+        mov [rdx + 8*rsi], r12
+        jmp .loop
     
     .fueraRango:
         xor rcx, rcx
@@ -334,11 +365,49 @@ arrayRemove:
     .fin: 
         mov rax, rcx  
 
+    pop r15
+    pop r14
+    pop r13
+    pop r12
     pop rbp
 ret
 
 ; void arraySwap(array_t* a, uint8_t i, uint8_t j)
 arraySwap:
+    push rbp
+    mov rbp, rsp
+    push r12
+    push r13
+    push r14
+    push r15
+
+    mov r12, rdi
+    mov r13, rsi
+    mov r14, rdx
+
+    call arrayGet
+    cmp rax, 0
+    je .fin
+    mov r15, rax
+
+    mov rdi, r12
+    mov rsi, r14
+    call arrayGet
+    cmp rax, 0
+    je .fin
+
+    mov rbx, [r15]
+    mov rcx, [rax]
+    mov [r15], rcx
+    mov [rax], rbx
+
+    .fin:
+
+    pop r15
+    pop r14
+    pop r12
+    pop r13
+    pop rbp
 ret
 
 ; void arrayDelete(array_t* a) {
@@ -346,33 +415,43 @@ arrayDelete:
     push rbp
     mov rbp, rsp
     push r12 
-    push r13 
-  
+    push r13
+    push r14 
+    sub rsp,8
+
     xor r13, r13
     xor r12, r12
+    xor r14, r14
     xor rcx, rcx
 
-    mov r13, rdi 
+    mov r13, rdi
+    
+     
+    mov qword rdi, [ r13 ]
     call getDeleteFunction
 
-    mov rdi, [r13 + 8]
+    ; mov rdi, [r13 + 8]
+    mov qword r12, [r13 + 8]
 
     .loop :
-        cmp qword [rdi + 8*rcx], 0
+        cmp qword [r12 + 8*r14], 0
         je .finloop
-        mov [rdi + 8*rcx], rax
-        inc rcx
+        ; mov [rdi + 8*r14], rax
+        mov qword rdi,[r12 + 8*r14] 
+        call rax
+        inc r14
         jmp .loop
     .finloop: 
     
-    ;en el loop solo elimino a lo que apunta cada posicion del array osea el contenido, 
-    ;con el call free me aseguro de eliminar el array cada posicion suceciva donde almacenaba los datos
+    
+    mov qword rdi, [ r13 + 8 ]
+    call free
 
+    mov rdi, r13
     call free  ; Liberar la memoria del array
 
-    mov dword [r13 + 4], 0  ; Restablecer size
-    mov dword [r13 + 5], 0  ; Restablecer capacity
-
+    add rsp, 8
+    pop r14
     pop r13
     pop r12
     pop rbp
@@ -380,6 +459,67 @@ ret
 
 ;void arrayPrint(array_t* a, FILE* pFile)
 arrayPrint:
+    push rbp
+    mov rbp, rsp
+    push r12 
+    push r13
+    push r14
+    push r15 
+    push rbx
+    sub rsp, 8
+  
+    mov r12, rdi
+    mov r13, rsi
+
+    mov edi, [r12]
+    call getPrintFunction
+
+    mov rbx, rax           ;rbx guarda la funcion de print correspondiente
+
+    mov r14, [r12 + 8]     ; posicionamos r14 al inicio de nuestro array
+
+    mov rdi, rsi
+    mov rsi, stringFormato
+    mov rdx, corcheteApertura
+    mov al, 0
+    call fprintf
+
+    xor r15, r15
+
+    .loop :
+        cmp qword [r14 + 8*r15], 0
+        je .finloop
+
+        mov qword rdi,[r14 + 8*r15] 
+        mov rsi, r13
+        call rbx
+
+        inc r15
+        cmp qword [r14 + 8*r15], 0
+        je .finloop
+
+        mov rdi, r13
+        mov rsi, stringFormato
+        mov rdx, coma
+        mov al, 0
+        call fprintf
+
+        jmp .loop
+    .finloop: 
+    
+    mov rdi, r13
+    mov rsi, stringFormato
+    mov rdx, corcheteCierre
+    mov al, 0
+    call fprintf
+
+    add rsp, 8
+    pop rbx
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rbp
 ret
 
 ; ** Card **
@@ -423,22 +563,114 @@ ret
 
 ;char* cardGetSuit(card_t* c)
 cardGetSuit:
+    push rbp
+    mov rbp, rsp
+
+    mov rax, [rdi]  ; Cargar el puntero a la cadena suit en eax
+
+    pop rbp
 ret
 
 ;int32_t* cardGetNumber(card_t* c)
 cardGetNumber:
+    push rbp
+    mov rbp, rsp
+
+    mov rax, [rdi + 8]
+    
+    pop rbp
 ret
 
 ;list_t* cardGetStacked(card_t* c)
 cardGetStacked:
+    push rbp
+    mov rbp, rsp
+
+    mov rax, [rdi + 16]
+
+    pop rbp
 ret
 
 ;void cardPrint(card_t* c, FILE* pFile)
 cardPrint:
+    push rbp
+    mov rbp, rsp
+    push r12
+    push r13
+
+    mov r12, rdi
+    mov r13, rsi
+
+    mov rdi, rsi
+    mov rsi, llaveApertura
+    mov al, 0
+    call fprintf
+
+    mov rdi, r13
+    mov rsi, [r12]
+    mov al, 0
+    call fprintf
+
+    mov rdi, r13
+    mov rsi, guion
+    mov al, 0
+    call fprintf
+
+    mov rdi, r13
+    mov rsi, intFormato
+    mov rdx, [r12 + 8] 
+    mov rdx, [rdx]
+    mov al, 0
+    call fprintf
+
+    mov rdi, r13
+    mov rsi, guion
+    mov al, 0
+    call fprintf
+
+    mov rdi, [r12 + 16]
+    mov rsi, r13
+    call listPrint
+
+    mov rdi, r13
+    mov rsi, llaveCierre
+    mov al, 0
+    call fprintf
+
+    pop r13
+    pop r12
+    pop rbp   
 ret
 
 ;int32_t cardCmp(card_t* a, card_t* b)
 cardCmp:
+    push rbp
+    mov rbp, rsp
+    push r12
+    push r13
+
+    mov r12, rdi
+    mov r13, rsi
+
+    mov rdi, 2
+    call getCompareFunction
+    mov qword rdi, [r12]
+    mov qword rsi, [r13]
+    call rax                 
+    cmp rax, 0
+    jne .fin
+
+    mov rdi, 1
+    call getCompareFunction
+    mov qword rdi, [r12 + 8]
+    mov qword rsi, [r13 + 8]
+    call rax
+
+    .fin:
+
+    pop r13
+    pop r12
+    pop rbp
 ret
 
 ;card_t* cardClone(card_t* c)
@@ -495,15 +727,15 @@ cardDelete:
 
     mov rdi, 2
     call getDeleteFunction
-    mov qword rdi, [r12]
+    mov rdi, [r12]
     call rax
 
     mov rdi, 1
     call getDeleteFunction
-    mov qword rdi, [r12 + 8]
+    mov rdi, [r12 + 8]
     call rax
 
-    mov qword rdi, [r12 + 16]
+    mov rdi, [r12 + 16]
     call listDelete
 
     mov rdi, r12

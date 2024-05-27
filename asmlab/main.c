@@ -20,8 +20,9 @@ int main (void){
 
     card_t *cardStacked = listGet(card->stacked, 0);
 
-    if((card->stacked->size) == 1 && *(cardStacked->number) == number2 && strcmp(cardStacked->suit, str2) == 0)
-        printf("Exito");
+    assert((card->stacked->size) == 1);
+    assert(*(cardStacked->number) == number2);
+    assert(strcmp(cardStacked->suit, str2) == 0);
 
     cardDelete(card);
     cardDelete(card2);
