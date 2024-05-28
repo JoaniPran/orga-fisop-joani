@@ -145,49 +145,41 @@ strCmp:
     push rbp
     mov rbp, rsp
 
-    xor rcx, rcx
-    xor rdx, rdx
+    push r12
+    push r13
+    push r14
 
-    .loop:
-        mov dl, [rdi + rcx]
+    xor rax, rax    ; Pone rax en 0
+    mov r14, 0
 
-        cmp dl, 0
-        je .aVacio
-        cmp byte [rsi + rcx], 0
-        je .bVacio
+    loop:
+    movzx r12, byte [rdi + r14]
+    movzx r13, byte [rsi + r14]
 
-        cmp dl, [rsi + rcx]
-        jne .comparacion
+    inc r14
 
-        inc rcx
-        jmp .loop
-    
-    .comparacion:
-        cmp dl, [rsi + rcx]
-        jl .aMenor
-        jg .bMenor
+    cmp r12, r13
+    jg  aEsMayor
+    jl  bEsMayor
+    cmp r12, 0
+    je  end
+    cmp r13, 0
+    je  end
 
-    .aMenor:
-        mov rax, 1
-        jmp .fin
+    cmp r12, r13
+    je  loop
 
-    .bMenor:
-        mov rax, -1
-        jmp .fin
+    aEsMayor:
+    mov rax, -1     
+    jmp end
 
-    .aVacio:
-        cmp dl, [rsi + rcx]
-        je .abIguales
+    bEsMayor:     
+    mov rax, 1
 
-    .bVacio:
-        jmp .bMenor
-    
-    .abIguales:
-        mov rax, 0
-        jmp .fin
-
-    .fin:
-
+    end:
+    pop r14
+    pop r13
+    pop r12
     pop rbp
 ret
 
@@ -377,36 +369,24 @@ arraySwap:
     push rbp
     mov rbp, rsp
     push r12
-    push r13
-    push r14
-    push r15
 
-    mov r12, rdi
-    mov r13, rsi
-    mov r14, rdx
+    movzx rcx, byte [rdi + 4]
+    cmp rsi, rcx
+    jge fin
+    cmp rdx, rcx
+    jge fin
 
-    call arrayGet
-    cmp rax, 0
-    je .fin
-    mov r15, rax
+    mov r8, [rdi + 8]          
+    mov r9, [r8 + 8*rsi]       
+    lea r10, [r8 + 8*rsi]      
+    mov r11, [r8 + 8*rdx]     
+    lea r12, [r8 + 8*rdx]      
 
-    mov rdi, r12
-    mov rsi, r14
-    call arrayGet
-    cmp rax, 0
-    je .fin
+    mov [r12], r9
+    mov [r10], r11
 
-    mov rbx, [r15]
-    mov rcx, [rax]
-    mov [r15], rcx
-    mov [rax], rbx
-
-    .fin:
-
-    pop r15
-    pop r14
+    fin:
     pop r12
-    pop r13
     pop rbp
 ret
 
@@ -414,106 +394,100 @@ ret
 arrayDelete:
 
     push rbp
-        mov rbp, rsp
-        push r12
-        push r13
-        push r14
-        push r15
+    mov rbp, rsp
+    push r12
+    push r13
+    push r14
+    push r15
 
-        movzx r12, byte [rdi + 4] 
-        mov r13, [rdi + 8]
-        mov r14, rdi
+    movzx r12, byte [rdi + 4] 
+    mov r13, [rdi + 8]
+    mov r14, rdi
 
-        mov rdi, [rdi]
-        call getDeleteFunction 
+    mov rdi, [rdi]
+    call getDeleteFunction 
 
-        mov r15, rax
+    mov r15, rax
 
-        arrayLoop:
-        cmp r12, 0
-        je arrayLoopFin
+    arrayLoop:
+    cmp r12, 0
+    je arrayLoopFin
 
-        dec r12
-        mov rdi, [r13 + 8*r12]
-        call r15
+    dec r12
+    mov rdi, [r13 + 8*r12]
+    call r15
 
-        mov rdi, r14
-        jmp arrayLoop
+    mov rdi, r14
+    jmp arrayLoop
         
-        arrayLoopFin:
+    arrayLoopFin:
 
-        mov rdi, r13
-        call free
+    mov rdi, r13
+    call free
         
-        mov rdi, r14
-        call free
+    mov rdi, r14
+    call free
 
-        pop r15
-        pop r14
-        pop r13
-        pop r12
-        pop rbp
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rbp
 ret
 
 ;void arrayPrint(array_t* a, FILE* pFile)
 arrayPrint:
     push rbp
     mov rbp, rsp
-    push r12 
+    push r12
     push r13
     push r14
-    push r15 
     push rbx
-    sub rsp, 8
-  
+
     mov r12, rdi
     mov r13, rsi
+    movzx r14, byte [rdi + 4]        
+    mov rbx, 0
 
-    mov edi, [r12]
+    mov rdi, [r12]
     call getPrintFunction
 
-    mov rbx, rax           ;rbx guarda la funcion de print correspondiente
+    mov r15, rax
 
-    mov r14, [r12 + 8]     ; posicionamos r14 al inicio de nuestro array
-
-    mov rdi, rsi
-    mov rsi, stringFormato
-    mov rdx, corcheteApertura
-    mov al, 0
-    call fprintf
-
-    xor r15, r15
-
-    .loop :
-        cmp qword [r14 + 8*r15], 0
-        je .finloop
-
-        mov qword rdi,[r14 + 8*r15] 
-        mov rsi, r13
-        call rbx
-
-        inc r15
-        cmp qword [r14 + 8*r15], 0
-        je .finloop
-
-        mov rdi, r13
-        mov rsi, stringFormato
-        mov rdx, coma
-        mov al, 0
-        call fprintf
-
-        jmp .loop
-    .finloop: 
-    
     mov rdi, r13
-    mov rsi, stringFormato
-    mov rdx, corcheteCierre
+    mov rsi, corcheteApertura
+        
     mov al, 0
     call fprintf
 
-    add rsp, 8
+    cmp r14, 0              
+    je finPrint
+
+    printLoop:
+    mov rdi, [r12 + 8]
+    mov rdi, [rdi + 8*rbx]
+    mov rsi, r13
+    call r15
+
+    inc rbx
+    cmp r14, rbx
+    je finPrint
+
+    mov rdi, r13
+    mov rsi, coma
+        
+    mov al, 0
+    call fprintf
+    jmp printLoop
+
+    finPrint:
+    mov rdi, r13
+    mov rsi, corcheteCierre
+        
+    mov al, 0
+    call fprintf
+
     pop rbx
-    pop r15
     pop r14
     pop r13
     pop r12
