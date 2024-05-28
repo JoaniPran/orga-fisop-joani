@@ -266,7 +266,7 @@ void *listRemove(list_t *l, uint8_t i)
     return actualData;
 }
 
-void  listSwap(list_t* l, uint8_t i, uint8_t j) 
+void listSwap(list_t* l, uint8_t i, uint8_t j) 
 {
     if (i >= l->size || j >= l->size) {
         return;
