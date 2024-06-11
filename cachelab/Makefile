@@ -4,11 +4,17 @@ LIBS:=-lm
 
 all: cachesim
 
-cachesim: cachesim.o
+cachesim: cachesim.o parceador.o cache.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
 
-cachesim.o: cachesim.c
-	$(CC) $(CFLAGS) -c $^ -o $@
+cache.o: cache.c cache.h parceador.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+parceador.o: parceador.c parceador.h 
+	$(CC) $(CFLAGS) -c $< -o $@
+
+cachesim.o: cachesim.c parceador.h cache.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f *.o
