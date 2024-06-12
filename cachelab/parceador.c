@@ -17,15 +17,15 @@ char* archivoTraza(char* nombreArchivo) {
 }
 
 void verificarArchivo(char* nombreArchivo) {
-    FILE *file = fopen(archivoTraza(nombreArchivo), "r");
-    
+    char* archTraza = archivoTraza(nombreArchivo);
+    FILE *file = fopen(archTraza, "r");
     if(file == NULL) {
         fprintf(stderr, "Archivo inexistente.\n");
+        free(archTraza);
         exit(EXIT_FAILURE);
     }
-
     fclose(file);
-    free(archivoTraza(nombreArchivo));
+    free(archTraza);
 }
 
 int32_t argCache(char* argCache) {
@@ -94,14 +94,14 @@ void argsParse(int argc, char* argv[]) {
 }
 
 bool readTransaction(FILE *file, transaction_t *t) {
-    char buffer[50];
+    char buffer[40];
     if(fgets(buffer, sizeof(buffer), file) != NULL) {
         buffer[strcspn(buffer, "\n")] = 0;
-        t->address = strtok(buffer, ": ");
+        t->address = (uint32_t)strtol(strtok(buffer, ": "), NULL, 16);
         t->operation = strtok(NULL, " ");
-        t->address2 = strtok(NULL, " ");
-        t->size = strtok(NULL, " ");
-        t->value = strtok(NULL, " ");
+        t->address2 = (uint32_t)strtol(strtok(NULL, " "), NULL, 16);
+        t->size = (uint32_t)strtol(strtok(NULL, " "), NULL, 10);
+        t->value = (uint32_t)strtol(strtok(NULL, " "), NULL, 16);
         return true;
     }
     return false;

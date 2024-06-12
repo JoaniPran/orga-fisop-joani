@@ -21,11 +21,11 @@ typedef struct s_args {
 extern args_t args;
 
 typedef struct s_transaction {
-    char* address;
+    uint32_t address;
     char* operation;
-    char* address2;
-    char* size;
-    char* value;
+    uint32_t address2;
+    uint32_t size;
+    uint32_t value;
 } transaction_t;
 extern transaction_t t;
 #endif

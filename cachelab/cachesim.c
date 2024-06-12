@@ -4,15 +4,19 @@
 int main (int argc, char* argv[]){ 
     argsParse(argc, argv);   
 
-    statsCache_t* cache = makeCache();
+    cache_t* cache = makeCache();
 
     FILE *file = fopen(args.archTraza, "r");
     transaction_t t;
-    while(readTransaction(file, &t)) {
+    int contador = 0;
+    while(readTransaction(file, &t) && contador < 1) {
         process(cache, &t);
+        contador++;
     }
-    printStats(cache);
     fclose(file);
+    printStats(cache);
+    realeseCache(cache);
+    free(args.archTraza);
 
     return 0;
 }
