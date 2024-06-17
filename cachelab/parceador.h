@@ -7,6 +7,7 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <unistd.h>
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -22,7 +23,7 @@ extern args_t args;
 
 typedef struct s_transaction {
     uint32_t address;
-    char* operation;
+    char operation;
     uint32_t address2;
     uint32_t size;
     uint32_t value;
@@ -30,14 +31,14 @@ typedef struct s_transaction {
 extern transaction_t t;
 #endif
 
-void verificarCantidadDeArgumentos(int argc);
+bool cantidadCorrectaDeArgumentos(int argc);
 char* archivoTraza(char* nombreArchivo);
-void verificarArchivo(char* nombreArchivo);
+bool archivoExistente(char* archivoTraza);
 int32_t argCache(char* argCache);
 bool esPotenciaDeDos(int32_t numero);
 bool argModoVerbosoValidos(int32_t n, int32_t m);
 bool esCombinacionValida(int32_t C, int32_t E, int32_t S);
-void verificarArgCache(char* argv[]);
-args_t crearStructArgs(char* archTraza, int32_t C, int32_t E, int32_t S, int32_t n, int32_t m);
-void argsParse(int argc, char* argv[]);
+bool argsCacheCorrectos(char* argv[]);
+void crearStructArgs(char* archTraza, int32_t C, int32_t E, int32_t S, int32_t n, int32_t m);
+bool argsParse(int argc, char* argv[]);
 bool readTransaction(FILE *file, transaction_t *t);
