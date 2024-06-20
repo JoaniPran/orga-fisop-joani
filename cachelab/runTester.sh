@@ -10,7 +10,6 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 
 echo "**Corriendo tests"
 
@@ -26,4 +25,3 @@ else
 fi
 
 echo " "
-
