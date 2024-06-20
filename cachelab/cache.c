@@ -18,31 +18,7 @@ void inicializarStatsCache(cache_t *cache) {
     cache->stats.wmiss = 0;
 }
 
-// linea_t* makeLinea() {
-//     linea_t* l = malloc(sizeof(linea_t));
-//     l->bitValides = false;
-//     l->dirtyBit = false;
-//     l->tag = 0;
-//     l->tiempoDeAcceso = 0;
-//     l->numeroDeLinea = 0;
-//     return l;
-// }
-
-// set_t* makeSet(int32_t lineasPorSet) {
-//     set_t* s = malloc(sizeof(set_t) + lineasPorSet * sizeof(linea_t));
-//     for(int i = 0; i < lineasPorSet; i++) {
-//         s->lineas[i] = *makeLinea();
-//     }
-//     return s;
-// }
-
 cache_t* makeCache() {
-    //cache_t* c = (cache_t*)malloc(sizeof(cache_t));
-    //inicializarStatsCache(c);
-    //c = malloc(sizeof(cache_t) + c->data.cantidadDeSets * sizeof(set_t));
-    // for(int i = 0; i <  args.cantidadDeSets; i++) {
-    //     c->sets[i] = *makeSet(args.lineasPorSet);
-    // }
     cache_t* cache = (cache_t*)malloc(sizeof(cache_t));
     cache->sets = (set_t**)malloc(args.cantidadDeSets * sizeof(set_t*));
     for(int i = 0; i < args.cantidadDeSets; i++) {
@@ -220,24 +196,7 @@ void printStats(cache_t *cache) {
     printf("miss rate %.6f\n", cache->stats.missRate);
 }
 
-// void realeseLinea(linea_t *l) {
-//     free(l);
-// }
-
-// void realeseSet(set_t *s, int32_t lineasPorSet) {
-//     for(int i = 0; i < lineasPorSet; i++) {
-//         realeseLinea(&(s->lineas[i]));
-//     }
-//     free(s);
-// }
-
 void realeseCache(cache_t *cache) {
-    // for (int i = 0; i < args.cantidadDeSets; i++) {
-    //     realeseSet(&(c->sets[i]), args.lineasPorSet);
-    // }
-    // free(c);
-    // free(args.archTraza);
-
     for(int i = 0; i < args.cantidadDeSets; i++) {
         for(int j = 0; j < args.lineasPorSet; j++) {
             free(cache->sets[i]->lineas[j]);

@@ -2,6 +2,38 @@
 
 args_t args;
 
+bool argsParse(int argc, char* argv[]) {
+    if(!argsCacheCorrectos(argv)) {
+        return false;
+    }
+    if(!cantidadCorrectaDeArgumentos(argc)) {
+        return false;
+    }
+    if(!archivoExistente(argv[1])) {
+        return false;
+    }
+    archivoTraza(argv[1]);
+    crearStructArgs(argCache(argv[2]), argCache(argv[3]), argCache(argv[4]), argCache(argv[6]), argCache(argv[7]));
+    return true;
+}
+
+bool readTransaction(FILE *file, transaction_t *t) {
+    char buffer[100];
+    char* op;
+
+    if(!fgets(buffer, sizeof(buffer), file)) return false;
+
+    buffer[strcspn(buffer, "\n")] = 0;
+    t->address = (uint32_t)strtol(strtok(buffer, ": "), NULL, 16);
+    op = strtok(NULL, " ");
+    t->operation = op[0];
+    t->address2 = (uint32_t)strtol(strtok(NULL, " "), NULL, 16);
+    t->size = (uint32_t)strtol(strtok(NULL, " "), NULL, 10);
+    t->value = (uint32_t)strtol(strtok(NULL, " "), NULL, 16);
+
+    return true;
+}
+
 bool cantidadCorrectaDeArgumentos(int argc) {
     if(argc != 5 && argc != 8) {
         fprintf(stderr, "La cantidad de parámetros no es la correcta.\n");
@@ -10,26 +42,27 @@ bool cantidadCorrectaDeArgumentos(int argc) {
     return true;
 }
 
-char* archivoTraza(char* nombreArchivo) {
-    char* arch = malloc(strlen(nombreArchivo) + strlen("trazas/") + 1);
-    strcpy(arch, "trazas/");
-    strcat(arch, nombreArchivo);
-    return arch;
-}
+bool archivoExistente(char* nombreArchivo) {
+    char adpcm[] = "adpcm.xex";
+    char blowfish[] = "blowfish.xex";
+    char fft[] = "FFT.xex";
 
-bool archivoExistente(char* archivoTraza) {
-    FILE *file = fopen(archivoTraza, "r");
-    if(file == NULL) {
+    if(!strcmp(adpcm, nombreArchivo) || !strcmp(blowfish, nombreArchivo) || !strcmp(fft, nombreArchivo)) {
         fprintf(stderr, "Archivo inexistente.\n");
         return false;
     }
-    fclose(file);
+
     return true;
 }
 
+void archivoTraza(char* nombreArchivo) {
+    args.archTraza = malloc(strlen(nombreArchivo) + strlen("trazas/") + 1);
+    strcpy(args.archTraza, "trazas/");
+    strcat(args.archTraza, nombreArchivo);
+}
+
 int32_t argCache(char* argCache) {
-    int32_t arg = (int32_t)strtol(argCache, NULL, 10);
-    return arg;
+    return (int32_t)strtol(argCache, NULL, 10);
 }
 
 bool esPotenciaDeDos(int32_t numero) {
@@ -41,10 +74,7 @@ bool argModoVerbosoValidos(int32_t n, int32_t m) {
 }
 
 bool esCombinacionValida(int32_t C, int32_t E, int32_t S) {
-    if (C % (E * S) != 0) {
-        return false;
-    }
-    return true;
+    return (C % (E * S) == 0);
 }
 
 bool argsCacheCorrectos(char* argv[]) {
@@ -72,40 +102,10 @@ bool argsCacheCorrectos(char* argv[]) {
     return true;
 }
 
-void crearStructArgs(char* archTraza, int32_t C, int32_t E, int32_t S, int32_t n, int32_t m) {
-    args.archTraza = archTraza;
+void crearStructArgs(int32_t C, int32_t E, int32_t S, int32_t n, int32_t m) {
     args.sizeCache = C;
     args.lineasPorSet = E;
     args.cantidadDeSets = S;
     args.n = n;
     args.m = m;
-}
-
-bool argsParse(int argc, char* argv[]) {
-    // char* archTraza = archivoTraza(argv[1]);
-    if(!argsCacheCorrectos(argv)) return false;
-    if(!cantidadCorrectaDeArgumentos(argc)) return false;
-    // if(!archivoExistente(archTraza)) {
-    //     free(archTraza);
-    //     return false;
-    // }
-    // crearStructArgs(archTraza, argCache(argv[2]), argCache(argv[3]), argCache(argv[4]), argCache(argv[6]), argCache(argv[7]));
-    // free(archTraza);
-    return true;
-}
-
-bool readTransaction(FILE *file, transaction_t *t) {
-    char buffer[100];
-    char* op;
-    if(fgets(buffer, sizeof(buffer), file)) {
-        buffer[strcspn(buffer, "\n")] = 0;
-        t->address = (uint32_t)strtol(strtok(buffer, ": "), NULL, 16);
-        op = strtok(NULL, " ");
-        t->operation = op[0];
-        t->address2 = (uint32_t)strtol(strtok(NULL, " "), NULL, 16);
-        t->size = (uint32_t)strtol(strtok(NULL, " "), NULL, 10);
-        t->value = (uint32_t)strtol(strtok(NULL, " "), NULL, 16);
-        return true;
-    }
-    else return false;
 }
